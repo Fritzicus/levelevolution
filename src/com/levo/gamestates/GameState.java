@@ -5,24 +5,35 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public abstract class GameState {
-
-	private GameState gameState;
+	
+	private boolean done;
+	private GameState nextState;
 	
 	public GameState() {
-		gameState = this;
-	}
-	
-	protected void setGameState(GameState gameState) {
-		this.gameState = gameState;
-	}
-
-	public GameState getGameState() {
-		return gameState;
+		done = false;
+		nextState = null;
 	}
 
 	public abstract void draw(Graphics g);
 	
 	public abstract void update();
+
+	// Returning anything non null will cause that gamestate to be pushed on the gamestate stack
+	public GameState nextState() {
+		return nextState;
+	}
+	
+	protected void setNextState(GameState nextState) {
+		this.nextState = nextState;
+	}
+	
+	public boolean isDone() {
+		return done;
+	}
+	
+	protected void exit() {
+		done = true;
+	}
 	
 	public void dispose() {};
 

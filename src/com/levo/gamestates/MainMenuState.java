@@ -2,6 +2,7 @@ package com.levo.gamestates;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class MainMenuState extends GameState {
 
@@ -19,6 +20,11 @@ public class MainMenuState extends GameState {
 
 	public void update() {
 		
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		exit();
+		setNextState(new PlayState());
 	}
 
 }
