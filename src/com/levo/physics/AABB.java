@@ -4,34 +4,47 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 // TODO Hopefully deprecate this class when more serious physics comes along
+
+//(Axis Aligned Bounding Box)
 public class AABB {
 	
-	private Vec2 posA;
+	public Vec2 posA;
 	private Vec2 posB;
+	private double width, height;
 	
+	//Initialize AABB with given vectors
 	public AABB(Vec2 posA, Vec2 posB) {
 		this.posA = posA;
 		this.posB = posB;
+		
+		this.width = posB.x - posA.x;
+		this.height = posB.y - posA.y;
 	}
 	
-	public AABB(Vec2 posA, int width, int height) {
-		this(posA, new Vec2(posA.x + width, posA.y + height));
+	//Initialize AABB with given location vector and width/height values
+	public AABB(Vec2 posA, int w, int h) {
+		this(posA, new Vec2(posA.x + w, posA.y + h));
 	}
 	
+	//Calculate fill area and draw object
 	public void draw(Graphics2D g, Color c) {
-		g.setColor(c);
-		g.fillRect((int) posA.x, (int) posA.y, (int) (posB.x - posA.x), (int) (posB.y - posA.y));
+		g.setColor(c);		
+		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
 	}
 	
+	//Add vectors
 	public void addVec(Vec2 v) {
 		posA.add(v);
 		posB.add(v);
 	}
 	
+	//Test if box is colliding
 	public boolean isColliding(AABB other) {
 		return !(other.posB.y < posA.y || other.posB.x < posA.x || other.posA.x > posB.x || other.posA.y > posB.y);
+
 	}
-	
+
+	//
 	public Collision getCollision(AABB other) {
 		double xOverlap1 = other.posB.x - posA.x;
 		double xOverlap2 = posB.x - other.posA.x;

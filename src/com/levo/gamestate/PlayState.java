@@ -20,6 +20,7 @@ public class PlayState extends GameState {
 		blocks = new ArrayList<Block>();
 		blocks.add(new Block(new Vec2(50, 380), 100, 20, Color.BLUE));
 		blocks.add(new Block(new Vec2(150, 360), 200, 40, Color.BLUE));
+		blocks.add(new Block(new Vec2(50, 200), 200, 40, Color.cyan));
 		
 		p = new Player(new Vec2(40, 250));
 		

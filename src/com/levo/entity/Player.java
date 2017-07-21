@@ -18,8 +18,9 @@ public class Player extends Entity {
 	private Vec2 vel;
 	private boolean canJump;
 	
+	//Initialize with position
 	public Player(Vec2 pos) {
-		aabb = new AABB(pos, 50, 50);
+		aabb = new AABB(pos, 50, 50); 
 		vel = new Vec2(0, 0);
 	}
 	
@@ -33,7 +34,9 @@ public class Player extends Entity {
 	}
 	
 	public void handleCollisions(List<Block> blocks) {
+		//Step through each block in list
 		for (Block b : blocks) {
+			//Check if block is colliding
 			if (b.getAABB().isColliding(aabb)) {
 				Collision c = b.getAABB().getCollision(aabb);
 				
@@ -43,6 +46,7 @@ public class Player extends Entity {
 					canJump = true;
 				}
 				
+				
 				if (c.getDepth() >= 0) {
 					aabb.addVec(c.getNormal().scaled(c.getDepth()));
 				}
@@ -50,16 +54,26 @@ public class Player extends Entity {
 		}
 	}
 	
+	// TODO change horizontal movement speed while in air by referencing an 'inAir' bool?
 	public void keyPressed(int k) {
+		
 		if (k == KeyEvent.VK_SPACE) {
 			if (canJump && vel.y == 0) {
 				vel.add(new Vec2(0, -5));
+				vel.x = 0;
 				canJump = false;
+				
 			}
 		} else if (k == KeyEvent.VK_A || k == KeyEvent.VK_LEFT) {
-			vel.x = -SPEED;
+			if(canJump)
+				vel.x = -SPEED;
+			else
+				vel.x = -SPEED/4;
 		} else if (k == KeyEvent.VK_D || k == KeyEvent.VK_RIGHT) {
-			vel.x = SPEED;
+			if(canJump)
+				vel.x = SPEED;
+			else
+				vel.x = SPEED/4;
 		}
 	}
 	

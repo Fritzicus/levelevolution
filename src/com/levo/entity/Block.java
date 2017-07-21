@@ -19,7 +19,7 @@ public class Block extends Entity {
 	public void draw(Graphics2D g) {
 		aabb.draw(g, color);
 	}
-
+	
 	public AABB getAABB() {
 		return aabb;
 	}
