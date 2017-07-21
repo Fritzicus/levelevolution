@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import com.levo.gamestate.GameState;
 import com.levo.gamestate.MainMenuState;
+import com.levo.physics.Vec2;
 
 /* Top level game class:
  *  Creates window (800x800 JFrame)
@@ -29,7 +30,8 @@ import com.levo.gamestate.MainMenuState;
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 30L;
 
-	public static Font font = new Font("Courier", Font.PLAIN, 16); // Font that all Graphics is set to use by default
+	public static final Font FONT = new Font("Courier", Font.PLAIN, 16); // Font that all Graphics is set to use by default
+	public static final Vec2 GRAVITY = new Vec2(0, .1);
 	
 	private boolean running = false; // Bool for when Tread is running
 	private Stack<GameState> gs; // Stack of running gamestates (operates like a call stack)
@@ -59,7 +61,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		JFrame f = new JFrame("Level Evolution :)") {
 			private static final long serialVersionUID = 1L;
 		};
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(this);
 		f.pack();
 		f.setLocationRelativeTo(null);
@@ -83,7 +85,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 		g2d.scale(Math.min(width, height) / 400, Math.min(width, height) / 400);
 		
-		g2d.setFont(font);
+		g2d.setFont(FONT);
 		
 		// Draw the current gamestate
 		gs.peek().draw(g2d);
@@ -128,34 +130,41 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
+				System.out.println(gs);
 			}
 		}
 	}
 	
 	public static void drawStringCentered(Graphics2D g, String msg, int x, int y) {
-		FontMetrics metrics = g.getFontMetrics(font);
+		FontMetrics metrics = g.getFontMetrics(FONT);
 		x -= metrics.stringWidth(msg) / 2;
 		y += metrics.getHeight() / 2;
 		g.drawString(msg, x, y);
 	}
 
-	public void keyPressed(KeyEvent e) { gs.peek().keyPressed(e); }
+	public void keyPressed(KeyEvent e) { 
+		if (!gs.isEmpty())
+			gs.peek().keyPressed(e.getKeyCode()); 
+	}
 
-	public void keyReleased(KeyEvent e) { gs.peek().keyReleased(e); }
+	public void keyReleased(KeyEvent e) { 
+		if (!gs.isEmpty())
+			gs.peek().keyReleased(e.getKeyCode()); 
+	}
 	
 	public void keyTyped(KeyEvent e) { } // don't dispatch to gs because it isn't useful
 	
-	public void mouseClicked(MouseEvent e) { gs.peek().mouseClicked(e); }
+	public void mouseClicked(MouseEvent e) {  }
 
-	public void mouseEntered(MouseEvent e) { gs.peek().mouseEntered(e); }
+	public void mouseEntered(MouseEvent e) {  }
 
-	public void mouseExited(MouseEvent e) { gs.peek().mouseExited(e); }
+	public void mouseExited(MouseEvent e) { }
 
-	public void mousePressed(MouseEvent e) { gs.peek().mousePressed(e); }
+	public void mousePressed(MouseEvent e) {  }
 	
-	public void mouseReleased(MouseEvent e) { gs.peek().mouseReleased(e); }
+	public void mouseReleased(MouseEvent e) { }
 
-	public void mouseDragged(MouseEvent e) { gs.peek().mouseDragged(e); }
+	public void mouseDragged(MouseEvent e) { }
 
-	public void mouseMoved(MouseEvent e) { gs.peek().mouseMoved(e); }
+	public void mouseMoved(MouseEvent e) { }
 }

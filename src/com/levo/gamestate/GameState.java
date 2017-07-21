@@ -1,10 +1,9 @@
 package com.levo.gamestate;
 
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public abstract class GameState {
+public class GameState {
 	
 	private boolean done;
 	private GameState nextState;
@@ -14,9 +13,14 @@ public abstract class GameState {
 		nextState = null;
 	}
 
-	public abstract void draw(Graphics2D g);
+	public void draw(Graphics2D g) {
+		System.out.println("BAD");
+		
+	}
 	
-	public abstract void update();
+	public void update() {
+		
+	}
 
 	// Returning anything non null will cause that gamestate to be pushed on the gamestate stack
 	public GameState nextState() {
@@ -37,9 +41,9 @@ public abstract class GameState {
 	
 	public void dispose() {};
 
-	public void keyPressed(KeyEvent e) {}
+	public void keyPressed(int k) {}
 
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(int k) {}
 	
 	public void mouseClicked(MouseEvent e) {}
 

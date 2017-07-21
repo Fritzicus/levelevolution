@@ -1,4 +1,4 @@
-package com.levo.entity;
+package com.levo.physics;
 
 
 public class Vec2 {
