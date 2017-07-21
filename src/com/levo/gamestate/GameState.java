@@ -1,6 +1,6 @@
-package com.levo.gamestates;
+package com.levo.gamestate;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -14,7 +14,7 @@ public abstract class GameState {
 		nextState = null;
 	}
 
-	public abstract void draw(Graphics g);
+	public abstract void draw(Graphics2D g);
 	
 	public abstract void update();
 

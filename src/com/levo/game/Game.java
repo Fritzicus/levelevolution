@@ -3,6 +3,7 @@ package com.levo.game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -15,8 +16,8 @@ import java.util.Stack;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.levo.gamestates.GameState;
-import com.levo.gamestates.MainMenuState;
+import com.levo.gamestate.GameState;
+import com.levo.gamestate.MainMenuState;
 
 /* Top level game class:
  *  Creates window (800x800 JFrame)
@@ -28,7 +29,8 @@ import com.levo.gamestates.MainMenuState;
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 30L;
 
-	private Font font; // Font that all Graphics is set to use by default
+	public static Font font = new Font("Courier", Font.PLAIN, 16); // Font that all Graphics is set to use by default
+	
 	private boolean running = false; // Bool for when Tread is running
 	private Stack<GameState> gs; // Stack of running gamestates (operates like a call stack)
 	
@@ -63,8 +65,6 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		
-		font = new Font("Courier", Font.PLAIN, 25);
-
 		running = true;
 	}
 	
@@ -75,20 +75,18 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, (int) width, (int) height);
 		
-		// Translate 0, 0 to be the middle of the screen
+		// Rescale so that game is 400x400 and always displays in  square in JFrame
 		if (width > height) {
 			g2d.translate((width - height) / 2, 0);
 		} else {
 			g2d.translate(0, (height - width) / 2);			
 		}
-		
-		// Rescale so that game is 400x400 and always displays in  square in JFrame
 		g2d.scale(Math.min(width, height) / 400, Math.min(width, height) / 400);
 		
 		g2d.setFont(font);
 		
 		// Draw the current gamestate
-		gs.peek().draw(g);
+		gs.peek().draw(g2d);
 		
 		// Fill in black on the screen
 		g2d.setColor(Color.BLACK);
@@ -124,17 +122,24 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			lastTime = now;
 			while (delta >= 1) {
 				update();
+				repaint(); // Calls the paintcomponent method
 				delta--;
 			}
-			repaint(); // Repaint (calls the paintComponent method) happens as often as possible
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 			}
 		}
 	}
+	
+	public static void drawStringCentered(Graphics2D g, String msg, int x, int y) {
+		FontMetrics metrics = g.getFontMetrics(font);
+		x -= metrics.stringWidth(msg) / 2;
+		y += metrics.getHeight() / 2;
+		g.drawString(msg, x, y);
+	}
 
-	public void keyPressed(KeyEvent e) { gs.peek().keyPressed(e);}
+	public void keyPressed(KeyEvent e) { gs.peek().keyPressed(e); }
 
 	public void keyReleased(KeyEvent e) { gs.peek().keyReleased(e); }
 	
