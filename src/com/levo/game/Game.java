@@ -21,7 +21,7 @@ import com.levo.gamestate.MainMenuState;
 import com.levo.physics.Vec2;
 
 /* Top level game class:
- *  Creates window (800x800 JFrame)
+ *  Creates window (1000x1000 JFrame)
  *  Initializes a JPanel that fills entire JFrame and can be drawn on with Graphics object
  *  Implements game loop to draw and update game objects
  *  Manages gamestates and updates and draws current gamestate 
@@ -31,7 +31,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	private static final long serialVersionUID = 30L;
 
 	public static final Font FONT = new Font("Courier", Font.PLAIN, 16); // Font that all Graphics is set to use by default
-	public static final Vec2 GRAVITY = new Vec2(0, .1);
+	public static final Vec2 GRAVITY = new Vec2(0, .2);
 	
 	private boolean running = false; // Bool for when Tread is running
 	private Stack<GameState> gs; // Stack of running gamestates (operates like a call stack)
@@ -108,9 +108,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		GameState g = gs.peek();
 		g.update();
 		if (g.isDone())
-			gs.pop();
-		if (g.nextState() != null)
+			System.out.println("Popping" + gs.pop());
+		if (g.nextState() != null) {
+			System.out.println("Pushing: " + g.nextState());
 			gs.push(g.nextState());
+		}
 	}
 	
 	public void run() {

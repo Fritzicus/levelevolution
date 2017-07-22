@@ -21,12 +21,13 @@ public class PlayState extends GameState {
 		super();
 		
 		blocks = new ArrayList<Entity>();
-		blocks.add(new Block(new Vec2(50, 380), 100, 20, Color.GREEN));
-		blocks.add(new Block(new Vec2(150, 360), 1000, 40, Color.BLUE));
-		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
-		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
+		blocks.add(new Block(new Vec2(50, 380), 100, 60, Color.GREEN));
+		blocks.add(new Block(new Vec2(150, 360), 1000, 80, Color.BLUE));
+		blocks.add(new Block(new Vec2(50, 250), 200, 40, Color.CYAN));
+		blocks.add(new Block(new Vec2(420, 140), 80, 180, Color.RED));
+		blocks.add(new Block(new Vec2(600, 140), 80, 220, Color.RED));
 		
-		p = new Player(new Vec2(60, 250));
+		p = new Player(new Vec2(60, 250), keyDown);
 		cam = new Camera(p);
 		
 		System.out.println("PlayState initialized");
@@ -39,7 +40,6 @@ public class PlayState extends GameState {
 	public void update() {
 		p.update();
 		p.handleCollisions(blocks);
-		p.updateWithControls(keyDown);
 		cam.update();
 	}
 }

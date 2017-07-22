@@ -17,12 +17,12 @@ public class MainMenuState extends GameState {
 	}
 
 	public void update() {
-		
-	}
-	
-	public void keyPressed(int k) {
-		exit();
-		setNextState(new PlayState());
+		for (boolean b : keyDown) {
+			if (b) {
+				exit();
+				setNextState(new PlayState());
+			}
+		}
 	}
 
 }
