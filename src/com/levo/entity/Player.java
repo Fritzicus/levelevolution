@@ -45,12 +45,12 @@ public class Player extends Entity {
 				vel.y = JUMP_VELOCITY;
 			} else if (onWall && keyDown[KeyEvent.VK_A]) {
 				vel.y = JUMP_VELOCITY;
-				vel.x = SPEED / 2;
-				noMoveCooldown = 18;
+				vel.x = SPEED;
+				noMoveCooldown = 15;
 			} else if (onWall && keyDown[KeyEvent.VK_D]) {
 				vel.y = JUMP_VELOCITY;
 				vel.x = -SPEED;
-				noMoveCooldown = 18;
+				noMoveCooldown = 15;
 			}
 		} 
 		jumpKeyDown = keyDown[KeyEvent.VK_SPACE];
