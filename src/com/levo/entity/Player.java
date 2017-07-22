@@ -34,7 +34,7 @@ public class Player extends Entity {
 		vel.add(Game.GRAVITY);
 	}
 	
-	public void updateWithControsl(boolean[] keyDown) {
+	public void updateWithControls(boolean[] keyDown) {
 		if (keyDown[KeyEvent.VK_SPACE]) {
 			if (canJump && vel.y == 0) {
 				vel.add(new Vec2(0, -5));

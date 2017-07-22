@@ -38,6 +38,6 @@ public class PlayState extends GameState {
 	public void update() {
 		p.update();
 		p.handleCollisions(blocks);
-		p.updateWithControsl(keyDown);
+		p.updateWithControls(keyDown);
 	}
 }
