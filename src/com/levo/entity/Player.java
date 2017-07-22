@@ -18,10 +18,11 @@ public class Player extends Entity {
 	private Vec2 vel;
 	private boolean canJump;
 	
-	//Initialize with position
+	// Initialize with position
 	public Player(Vec2 pos) {
 		aabb = new AABB(pos, 50, 50); 
 		vel = new Vec2(0, 0);
+		canJump = true;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -33,17 +34,39 @@ public class Player extends Entity {
 		vel.add(Game.GRAVITY);
 	}
 	
+	public void updateWithControsl(boolean[] keyDown) {
+		if (keyDown[KeyEvent.VK_SPACE]) {
+			if (canJump && vel.y == 0) {
+				vel.add(new Vec2(0, -5));
+				canJump = false;
+			}
+		} 
+		vel.x = 0;
+		if (keyDown[KeyEvent.VK_A] || keyDown[KeyEvent.VK_LEFT]) {
+			if(canJump)
+				vel.x = -SPEED;
+			else
+				vel.x = -SPEED / 4;
+		} 
+		if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
+			if(canJump)
+				vel.x = SPEED;
+			else
+				vel.x = SPEED / 4;
+		}
+	}
+	
 	public void handleCollisions(List<Block> blocks) {
-		//Step through each block in list
 		for (Block b : blocks) {
-			//Check if block is colliding
+			// Check if block is colliding with player
 			if (b.getAABB().isColliding(aabb)) {
 				Collision c = b.getAABB().getCollision(aabb);
 				
-				System.out.println(c.getNormal() + " " + c.getDepth());
 				if (c.getNormal().y == -1) {
 					vel.y = 0;
 					canJump = true;
+				} if (c.getNormal().y == 1) {
+					vel.y = .1;
 				}
 				
 				
@@ -51,37 +74,6 @@ public class Player extends Entity {
 					aabb.addVec(c.getNormal().scaled(c.getDepth()));
 				}
 			}
-		}
-	}
-	
-	// TODO change horizontal movement speed while in air by referencing an 'inAir' bool?
-	public void keyPressed(int k) {
-		
-		if (k == KeyEvent.VK_SPACE) {
-			if (canJump && vel.y == 0) {
-				vel.add(new Vec2(0, -5));
-				vel.x = 0;
-				canJump = false;
-				
-			}
-		} else if (k == KeyEvent.VK_A || k == KeyEvent.VK_LEFT) {
-			if(canJump)
-				vel.x = -SPEED;
-			else
-				vel.x = -SPEED/4;
-		} else if (k == KeyEvent.VK_D || k == KeyEvent.VK_RIGHT) {
-			if(canJump)
-				vel.x = SPEED;
-			else
-				vel.x = SPEED/4;
-		}
-	}
-	
-	public void keyReleased(int k) {
-		if (k == KeyEvent.VK_A || k == KeyEvent.VK_LEFT) {
-			vel.x = 0;
-		} else if (k == KeyEvent.VK_D || k == KeyEvent.VK_RIGHT) {
-			vel.x = 0;
 		}
 	}
 }

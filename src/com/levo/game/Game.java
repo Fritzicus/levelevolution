@@ -88,7 +88,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		g2d.setFont(FONT);
 		
 		// Draw the current gamestate
-		gs.peek().draw(g2d);
+		if (!gs.isEmpty()) gs.peek().draw(g2d);
 		
 		// Fill in black on the screen
 		g2d.setColor(Color.BLACK);
@@ -103,6 +103,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	
 	// Update runs 60 times a second
 	public void update() {
+		if (gs.isEmpty()) 
+			return;
 		GameState g = gs.peek();
 		g.update();
 		if (g.isDone())

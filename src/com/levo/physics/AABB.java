@@ -21,47 +21,49 @@ public class AABB {
 		this.height = posB.y - posA.y;
 	}
 	
-	//Initialize AABB with given location vector and width/height values
-	public AABB(Vec2 posA, int w, int h) {
-		this(posA, new Vec2(posA.x + w, posA.y + h));
+	// Initialize AABB with given location vector and width/height values
+	public AABB(Vec2 posA, int width, int height) {
+		this(posA, new Vec2(posA.x + width, posA.y + height));
 	}
 	
-	//Calculate fill area and draw object
+	// Calculate fill area and draw object
 	public void draw(Graphics2D g, Color c) {
 		g.setColor(c);		
 		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
 	}
 	
-	//Add vectors
+	// Shift AABB by a vector
 	public void addVec(Vec2 v) {
 		posA.add(v);
 		posB.add(v);
 	}
 	
-	//Test if box is colliding
+	// Test if box is colliding
 	public boolean isColliding(AABB other) {
 		return !(other.posB.y < posA.y || other.posB.x < posA.x || other.posA.x > posB.x || other.posA.y > posB.y);
 
 	}
 
-	//
+	// Gets the collision object for a collision with another AABB
 	public Collision getCollision(AABB other) {
-		double xOverlap1 = other.posB.x - posA.x;
-		double xOverlap2 = posB.x - other.posA.x;
-		double yOverlap1 = other.posB.y - posA.y;
-		double yOverlap2 = posB.y - other.posA.y;
+		// Calculates x and y overlap between both AABBs
+		double xOverlap = Math.min(other.posB.x - posA.x, posB.x - other.posA.x);
+		double yOverlap = Math.min(posB.y - other.posA.y, other.posB.y - posA.y);
 		
-		if (Math.max(yOverlap1, yOverlap2) < Math.max(xOverlap1, xOverlap2)) {
-			if (yOverlap1 >= 0) {
-				return new Collision(new Vec2(3 * Math.PI / 2), yOverlap1);
+		// The smaller overlap is the axis the collision occurred on.
+		if (xOverlap > yOverlap) {
+			// Collision occurred in Y axis, now check if top or bottom
+			if (posA.y > other.posA.y) {
+				return new Collision(new Vec2(3 * Math.PI / 2), yOverlap);
 			} else {
-				return new Collision(new Vec2(Math.PI / 2), yOverlap2);
+				return new Collision(new Vec2(Math.PI / 2), yOverlap);
 			}
 		} else {
-			if (xOverlap1 >= 0) {
-				return new Collision(new Vec2(Math.PI), xOverlap1);
+			// Collision occurred in X axis, now check if left or right
+			if (posA.x > other.posA.x) {
+				return new Collision(new Vec2(Math.PI), xOverlap);
 			} else {
-				return new Collision(new Vec2(0), xOverlap2);
+				return new Collision(new Vec2(0), xOverlap);
 			}
 		}
 	}
