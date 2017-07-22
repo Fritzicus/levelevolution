@@ -40,5 +40,6 @@ public class PlayState extends GameState {
 		p.update();
 		p.handleCollisions(blocks);
 		p.updateWithControls(keyDown);
+		cam.update();
 	}
 }
