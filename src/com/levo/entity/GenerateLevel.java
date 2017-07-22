@@ -29,18 +29,22 @@ public class GenerateLevel {
 	public ArrayList<Entity> generateTerrain() {
 		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
 		for(int i = 0 ; i<levelX; i++) {
-			for(int j = 0; j++ <levelY; j++ ) {
+			for(int j = 0; j <levelY; j++ ) {
 				levelMap[i][j]=0;
-				levelMap[3][j]=1;
+				
+			//	levelMap[3][j]=1;
 			}
 		}
 		
+		for(int j = 0; j <levelY; j++ ) {
+			levelMap[3][j]=1;
+			levelMap[j][3]=1;
+		}
 		for(int i = 0 ; i<levelX; i++) {
-			levelMap[i][3]=1;
-			levelMap[i][2]=1;
-			for(int j = 0; j++ <levelY; j++ ) {
+			
+			for(int j = 0; j <levelY; j++ ) {
 				if(levelMap[i][j]==1) {
-					levelGrid.add(new Block(new Vec2(i*30, j*30), 30, 30, Color.GREEN));
+					levelGrid.add(new Block(new Vec2(j*30, i*30), 30, 30, Color.GREEN));
 				}
 			}
 		}
