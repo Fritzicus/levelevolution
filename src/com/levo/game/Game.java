@@ -142,7 +142,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static void drawStringCentered(Graphics2D g, String msg, int x, int y) {
 		FontMetrics metrics = g.getFontMetrics(FONT);
 		x -= metrics.stringWidth(msg) / 2;
-		y += metrics.getHeight() / 2;
+		y += metrics.getHeight() / 3;
 		g.drawString(msg, x, y);
 	}
 

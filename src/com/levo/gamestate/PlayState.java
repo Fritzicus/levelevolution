@@ -9,6 +9,7 @@ import com.levo.entity.Block;
 import com.levo.entity.Camera;
 import com.levo.entity.Entity;
 import com.levo.entity.Player;
+import com.levo.game.Game;
 import com.levo.physics.Vec2;
 
 public class PlayState extends GameState {
@@ -35,6 +36,11 @@ public class PlayState extends GameState {
 	
 	public void draw(Graphics2D g) {
 		cam.draw(g, blocks);
+		
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, 400, 20);
+		g.setColor(Color.BLACK);
+		Game.drawStringCentered(g, "Level 1", 200, 10);
 	}
 
 	public void update() {
