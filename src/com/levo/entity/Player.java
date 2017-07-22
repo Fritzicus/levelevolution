@@ -26,7 +26,7 @@ public class Player extends Entity {
 	}
 	
 	public void draw(Graphics2D g) {
-		aabb.draw(g, Color.GREEN);
+		aabb.draw(g, new Color(102, 0, 204));
 	}
 	
 	public void update() {
@@ -46,18 +46,19 @@ public class Player extends Entity {
 			if(canJump)
 				vel.x = -SPEED;
 			else
-				vel.x = -SPEED / 4;
+				vel.x = -SPEED / 2;
 		} 
 		if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
 			if(canJump)
 				vel.x = SPEED;
 			else
-				vel.x = SPEED / 4;
+				vel.x = SPEED / 2;
 		}
 	}
 	
-	public void handleCollisions(List<Block> blocks) {
-		for (Block b : blocks) {
+	public void handleCollisions(List<Entity> blocks) {
+		for (Entity e : blocks) {
+			Block b = (Block) e;
 			// Check if block is colliding with player
 			if (b.getAABB().isColliding(aabb)) {
 				Collision c = b.getAABB().getCollision(aabb);
@@ -75,5 +76,9 @@ public class Player extends Entity {
 				}
 			}
 		}
+	}
+	
+	public Vec2 centerPoint() {
+		return aabb.centerPoint();
 	}
 }

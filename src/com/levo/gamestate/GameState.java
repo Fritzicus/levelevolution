@@ -47,14 +47,13 @@ public class GameState {
 	public void dispose() {};
 
 	public void keyPressed(int k) {
-		System.out.println("Pressed" + k);
-		System.out.println(keyDown[k]);
-		keyDown[k] = true;
+		if (k < keyDown.length)
+			keyDown[k] = true;
 	}
 
 	public void keyReleased(int k) {
-		System.out.println("Released" + k);
-		keyDown[k] = false;
+		if (k < keyDown.length)
+			keyDown[k] = false;
 	}
 	
 	public void mouseClicked(MouseEvent e) {}

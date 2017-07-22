@@ -67,4 +67,8 @@ public class AABB {
 			}
 		}
 	}
+	
+	public Vec2 centerPoint() {
+		return posA.added(new Vec2(width / 2, height / 2));
+	}
 }
