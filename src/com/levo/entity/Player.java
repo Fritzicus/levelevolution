@@ -12,7 +12,7 @@ import com.levo.physics.Vec2;
 
 public class Player extends Entity {
 	public static final double JUMP_VEL = -5.5;
-	public static final double SPEED = 3;
+	public static final double SPEED = 2.5;
 	public static final double GROUND_SPEED_MULTIPLIER = 1.5;
 	public static final double MAX_Y_SPEED = 15;
 	public static final double JUMP_VELOCITY = -5;
@@ -27,7 +27,7 @@ public class Player extends Entity {
 	
 	// Initialize with position
 	public Player(Vec2 pos, boolean[] keyDown) {
-		aabb = new AABB(pos, 10, 10); 
+		aabb = new AABB(pos, 10, 20); 
 		vel = new Vec2(0, 0);
 		onWall = false;
 		onGround = false;

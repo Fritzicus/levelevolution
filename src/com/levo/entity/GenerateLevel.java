@@ -13,7 +13,6 @@ public class GenerateLevel {
 		this.levelX = 30;
 		this.levelY = 30;
 		this.levelMap = new int[levelX][levelY];
-		
 	}
 	public GenerateLevel(int[] genome) {
 		this.levelX = 10;
