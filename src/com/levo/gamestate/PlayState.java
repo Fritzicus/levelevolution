@@ -8,27 +8,34 @@ import java.util.List;
 import com.levo.entity.Block;
 import com.levo.entity.Camera;
 import com.levo.entity.Entity;
+import com.levo.entity.GenerateLevel;
 import com.levo.entity.Player;
 import com.levo.game.Game;
 import com.levo.physics.Vec2;
 
 public class PlayState extends GameState {
 
-	private List<Entity> blocks;
+	public List<Entity> blocks;
 	private Player p;
 	private Camera cam;
 	
 	public PlayState() {
 		super();
 		
+		// going to add basic level generation for now
+		GenerateLevel createLevel = new GenerateLevel();
 		blocks = new ArrayList<Entity>();
-		blocks.add(new Block(new Vec2(50, 380), 100, 60, Color.GREEN));
-		blocks.add(new Block(new Vec2(150, 360), 1000, 80, Color.BLUE));
-		blocks.add(new Block(new Vec2(50, 250), 200, 40, Color.CYAN));
-		blocks.add(new Block(new Vec2(420, 140), 80, 180, Color.RED));
-		blocks.add(new Block(new Vec2(600, 140), 80, 220, Color.RED));
+		blocks = createLevel.generateTerrain();
+		/*
+		blocks = new ArrayList<Entity>();
 		
-		p = new Player(new Vec2(60, 250), keyDown);
+		blocks.add(new Block(new Vec2(50, 380), 100, 20, Color.GREEN));
+		blocks.add(new Block(new Vec2(150, 360), 1000, 40, Color.BLUE));
+		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
+		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
+		*/
+		p = new Player(new Vec2(10, 10), keyDown);
+
 		cam = new Camera(p);
 		
 		System.out.println("PlayState initialized");
