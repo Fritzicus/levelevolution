@@ -104,7 +104,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	// Update runs 60 times a second
 	public void update() {
 		if (gs.isEmpty()) 
-			return;
+			System.exit(0);
 		GameState g = gs.peek();
 		g.update();
 		if (g.isDone())
@@ -134,7 +134,6 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println(gs);
 			}
 		}
 	}
