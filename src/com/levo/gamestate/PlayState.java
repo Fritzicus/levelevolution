@@ -33,7 +33,7 @@ public class PlayState extends GameState {
 		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
 		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
 		*/
-		p = new Player(new Vec2(10, 10), keyDown);
+		p = new Player(new Vec2(10, -10), keyDown);
 
 		cam = new Camera(p);
 		
