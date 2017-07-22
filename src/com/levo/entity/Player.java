@@ -11,18 +11,28 @@ import com.levo.physics.Collision;
 import com.levo.physics.Vec2;
 
 public class Player extends Entity {
-	public static final double JUMP_VEL = -5;
-	public static final double SPEED = 5;
+	public static final double JUMP_VEL = -5.5;
+	public static final double SPEED = 3;
+	public static final double GROUND_SPEED_MULTIPLIER = 1.5;
+	public static final double MAX_Y_SPEED = 15;
+	public static final double JUMP_VELOCITY = -5;
 
 	private AABB aabb;
 	private Vec2 vel;
-	private boolean canJump;
+	private boolean jumpKeyDown;
+	private boolean onWall;
+	private boolean onGround;
+	private boolean[] keyDown;
+	private int noMoveCooldown;
 	
 	// Initialize with position
-	public Player(Vec2 pos) {
+	public Player(Vec2 pos, boolean[] keyDown) {
 		aabb = new AABB(pos, 10, 10); 
 		vel = new Vec2(0, 0);
-		canJump = true;
+		onWall = false;
+		onGround = false;
+		this.keyDown = keyDown;
+		noMoveCooldown = 0;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -30,33 +40,52 @@ public class Player extends Entity {
 	}
 	
 	public void update() {
-		aabb.addVec(vel);
-		vel.add(Game.GRAVITY);
-	}
-	
-	public void updateWithControls(boolean[] keyDown) {
-		if (keyDown[KeyEvent.VK_SPACE]) {
-			if (canJump && vel.y == 0) {
-				vel.add(new Vec2(0, -5));
-				canJump = false;
+		if (keyDown[KeyEvent.VK_SPACE] && !jumpKeyDown) {
+			if (onGround && vel.y == 0) {
+				vel.y = JUMP_VELOCITY;
+			} else if (onWall && keyDown[KeyEvent.VK_A]) {
+				vel.y = JUMP_VELOCITY;
+				vel.x = SPEED;
+				noMoveCooldown = 15;
+			} else if (onWall && keyDown[KeyEvent.VK_D]) {
+				vel.y = JUMP_VELOCITY;
+				vel.x = -SPEED;
+				noMoveCooldown = 15;
 			}
 		} 
-		vel.x = 0;
-		if (keyDown[KeyEvent.VK_A] || keyDown[KeyEvent.VK_LEFT]) {
-			if(canJump)
+		jumpKeyDown = keyDown[KeyEvent.VK_SPACE];
+				
+		if (noMoveCooldown <= 0) {
+			vel.x = 0;
+			if (keyDown[KeyEvent.VK_A] || keyDown[KeyEvent.VK_LEFT]) {
 				vel.x = -SPEED;
-			else
-				vel.x = -SPEED; // 2;
-		} 
-		if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
-			if(canJump)
+			} 
+			if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
 				vel.x = SPEED;
-			else
-				vel.x = SPEED; // 2;
+			}
+		} else {
+			noMoveCooldown--;
+		}
+		
+		aabb.addVec(vel);
+		if (onWall && vel.y > 0)
+			vel.add(Game.GRAVITY.scaled(.1));
+		else
+			vel.add(Game.GRAVITY);
+		
+		if (onGround) 
+			vel.x *= GROUND_SPEED_MULTIPLIER;
+		
+		if (vel.y > MAX_Y_SPEED) {
+			vel.y = MAX_Y_SPEED;
+		} else if (vel.y < -MAX_Y_SPEED) {
+			vel.y = -MAX_Y_SPEED;
 		}
 	}
 	
 	public void handleCollisions(List<Entity> blocks) {
+		onGround = false;
+		onWall = false;
 		for (Entity e : blocks) {
 			Block b = (Block) e;
 			// Check if block is colliding with player
@@ -65,11 +94,12 @@ public class Player extends Entity {
 				
 				if (c.getNormal().y == -1) {
 					vel.y = 0;
-					canJump = true;
-				} if (c.getNormal().y == 1) {
+					onGround = true;
+				} else if (c.getNormal().y == 1) {
 					vel.y = .1;
+				} else if (c.getNormal().x != 0) {
+					onWall = true;
 				}
-				
 				
 				if (c.getDepth() >= 0) {
 					aabb.addVec(c.getNormal().scaled(c.getDepth()));
