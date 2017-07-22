@@ -20,7 +20,7 @@ public class Player extends Entity {
 	
 	// Initialize with position
 	public Player(Vec2 pos) {
-		aabb = new AABB(pos, 50, 50); 
+		aabb = new AABB(pos, 10, 10); 
 		vel = new Vec2(0, 0);
 		canJump = true;
 	}
