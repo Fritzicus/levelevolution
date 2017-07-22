@@ -38,7 +38,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	
 	public Game() {
 		// Size of JFrame window
-		Dimension size = new Dimension(800, 800);
+		Dimension size = new Dimension(1000, 1000);
 			
 		// Start in Main menu
 		gs = new Stack<GameState>();
@@ -91,7 +91,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		if (!gs.isEmpty()) gs.peek().draw(g2d);
 		
 		// Fill in black on the screen
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(new Color(230, 230, 235));
 		if (width > height) {
 			g2d.fillRect((int) -width, 0, (int) width, 400);
 			g2d.fillRect(400, 0, (int) width, 400);

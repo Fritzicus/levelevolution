@@ -23,4 +23,8 @@ public class Block extends Entity {
 	public AABB getAABB() {
 		return aabb;
 	}
+	
+	public Vec2 centerPoint() {
+		return aabb.centerPoint();
+	}
 }
