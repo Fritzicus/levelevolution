@@ -46,13 +46,13 @@ public class Player extends Entity {
 			if(canJump)
 				vel.x = -SPEED;
 			else
-				vel.x = -SPEED / 2;
+				vel.x = -SPEED; // 2;
 		} 
 		if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
 			if(canJump)
 				vel.x = SPEED;
 			else
-				vel.x = SPEED / 2;
+				vel.x = SPEED; // 2;
 		}
 	}
 	
