@@ -5,18 +5,20 @@ import java.awt.Graphics2D;
 
 // TODO Hopefully deprecate this class when more serious physics comes along
 
-//(Axis Aligned Bounding Box)
+// (Axis Aligned Bounding Box)
 public class AABB {
 	
+	// Position A is a point vector for the top left of the rectangle
 	public Vec2 posA;
+	// Position B is a point vector for the bottom right of the rectangle
 	private Vec2 posB;
+	// Represent the width and the height of the rectangle
 	private double width, height;
 	
 	//Initialize AABB with given vectors
 	public AABB(Vec2 posA, Vec2 posB) {
 		this.posA = posA;
 		this.posB = posB;
-		
 		this.width = posB.x - posA.x;
 		this.height = posB.y - posA.y;
 	}
@@ -40,7 +42,7 @@ public class AABB {
 	
 	// Test if box is colliding
 	public boolean isColliding(AABB other) {
-		return !(other.posB.y < posA.y || other.posB.x < posA.x || other.posA.x > posB.x || other.posA.y > posB.y);
+		return !(other.posB.y <= posA.y || other.posB.x <= posA.x || other.posA.x >= posB.x || other.posA.y >= posB.y);
 
 	}
 
@@ -68,6 +70,7 @@ public class AABB {
 		}
 	}
 	
+	// Returns a Vec2 representing the center of the AABB
 	public Vec2 centerPoint() {
 		return posA.added(new Vec2(width / 2, height / 2));
 	}

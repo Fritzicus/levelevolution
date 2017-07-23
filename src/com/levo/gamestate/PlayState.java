@@ -13,6 +13,7 @@ import com.levo.game.Game;
 import com.levo.physics.Vec2;
 import com.sun.glass.events.KeyEvent;
 
+// The main state where the player plays the level
 public class PlayState extends GameState {
 
 	public List<Entity> blocks;
@@ -36,14 +37,17 @@ public class PlayState extends GameState {
 		*/
 		p = new Player(new Vec2(10, -10), keyDown);
 
+		// Initialize Camera to track the player
 		cam = new Camera(p);
 		
 		System.out.println("PlayState initialized");
 	}
 	
 	public void draw(Graphics2D g) {
+		// Draw all entities from the cameras perspective
 		cam.draw(g, blocks);
 		
+		// Draw a bar at the top with level number to test that camera still works
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 400, 20);
 		g.setColor(Color.BLACK);
@@ -51,10 +55,12 @@ public class PlayState extends GameState {
 	}
 
 	public void update() {
+		// Update player, blocks, camera
 		p.update();
 		p.handleCollisions(blocks);
 		cam.update();
 		
+		// On escape, close the game
 		if (keyDown[KeyEvent.VK_ESCAPE]) {
 			super.exit();
 		}

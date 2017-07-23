@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import com.levo.physics.AABB;
 import com.levo.physics.Vec2;
 
+// Represents a solid block that the player can jump and move around on
+// Currently is just an entity wrapping an AABB, but may have more functionality later
 public class Block extends Entity {
 
 	private AABB aabb;

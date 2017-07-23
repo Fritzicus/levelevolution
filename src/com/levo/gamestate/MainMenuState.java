@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import com.levo.game.Game;
 
 public class MainMenuState extends GameState {
+	// TODO, give users options such as New Game, Online, Load Game, Settings, etc.
 
 	public MainMenuState() {
 		
@@ -17,6 +18,7 @@ public class MainMenuState extends GameState {
 	}
 
 	public void update() {
+		// Currently exits Main menu and starts a PlayState when any key is pressed
 		for (boolean b : keyDown) {
 			if (b) {
 				exit();
@@ -24,5 +26,4 @@ public class MainMenuState extends GameState {
 			}
 		}
 	}
-
 }
