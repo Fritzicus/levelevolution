@@ -58,9 +58,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		addMouseMotionListener(this);
 		
 		// Create JFrame to house JPanel and size it to JPanel
-		JFrame f = new JFrame("Level Evolution :)") {
-			private static final long serialVersionUID = 1L;
-		};
+		JFrame f = new JFrame("Level Evolution :)");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(this);
 		f.pack();
@@ -101,12 +99,16 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 	
-	// Update runs 60 times a second
+	// Update runs 60 times a second causing a tick
 	public void update() {
+		// Terminate game if there is no gamestate
 		if (gs.isEmpty()) 
 			System.exit(0);
+		
 		GameState g = gs.peek();
-		g.update();
+		g.update(); // Update current gamestate
+		
+		// Pop a gamestate when it is finished, and push the next gamestate if there is one
 		if (g.isDone())
 			System.out.println("Popping" + gs.pop());
 		if (g.nextState() != null) {
@@ -138,6 +140,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 	
+	// Static helper method to draw a string centered at an x and y coordinate
 	public static void drawStringCentered(Graphics2D g, String msg, int x, int y) {
 		FontMetrics metrics = g.getFontMetrics(FONT);
 		x -= metrics.stringWidth(msg) / 2;
@@ -145,6 +148,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		g.drawString(msg, x, y);
 	}
 
+	// Mouse and Key event handlers below. (Called when mouse does actions and keys are pressed and released)
 	public void keyPressed(KeyEvent e) { 
 		if (!gs.isEmpty())
 			gs.peek().keyPressed(e.getKeyCode()); 

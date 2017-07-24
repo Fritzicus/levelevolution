@@ -1,7 +1,8 @@
 package com.levo.physics;
 
-
+// Represents a two dimensional vector with cartesian coordinates
 public class Vec2 {
+	// The minimum value either component of a vector can attain. Helps with optimization
 	public static final double MIN_VALUE_THRESHOLD = .000001;
 	
 	public double x, y; // Normally, I don't like public instance variables, but in this case, I think it's fairly benign
