@@ -33,22 +33,22 @@ public class Vec2 {
 		return Math.sqrt(lengthSquared());
 	}
 	
-	// Calculate length
+	// Calculate length squared (useful as sqrt operation is costly and sometimes unnecessary.
 	public double lengthSquared() {
 		return Math.pow(x, 2) + Math.pow(y, 2);
 	}
 	
-	// Calculate distance from distance^2
+	// Calculate distance from another vector
 	public double distance(Vec2 v) {
 		return Math.sqrt(distanceSquared(v));
 	}
 	
-	// Calculate distance(^2) from different vector
+	// Calculate squared distance from another vector
 	public double distanceSquared(Vec2 v) {
 		return Math.pow(x - v.x, 2) + Math.pow(y - v.y, 2);
 	}
 	
-	// Scale x-y by specified amount
+	// Scale vector length by specified amount
 	public void scale(double amt) {
 		x *= amt;
 		y *= amt;
@@ -94,15 +94,17 @@ public class Vec2 {
 		return new Vec2(x - v.x, y - v.y);		
 	}
 	
+	// Gives the dot product of this vector with vector v
 	public double dot(Vec2 v) {
 		return v.x * x + v.y * y;
 	}
 	
+	// Gives the length of another vector projected on this one
 	public double projectionLength(Vec2 v) {
 		return dot(v.normalized());
 	}
 	
-	// Normalize vector x-y
+	// Normalize vector (Creates a length 1 vector)
 	public void normalize() {
 		double len = length();
 		x /= len;

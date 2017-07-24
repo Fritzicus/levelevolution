@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.levo.gamestate.GameState;
-import com.levo.gamestate.MainMenuState;
+import com.levo.gamestate.PhysicsState;
 import com.levo.physics.Vec2;
 
 /* Top level game class:
@@ -42,7 +42,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			
 		// Start in Main menu
 		gs = new Stack<GameState>();
-		gs.push(new MainMenuState());
+		gs.push(new PhysicsState());
 		
 		// Set size of this JPanel (Game extends JPanel)
 		setPreferredSize(size);
@@ -100,13 +100,14 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	}
 	
 	// Update runs 60 times a second causing a tick
-	public void update() {
+	// dt parameter is the amounts of time elapsed since the last frame
+	public void update(double dt) {
 		// Terminate game if there is no gamestate
 		if (gs.isEmpty()) 
 			System.exit(0);
 		
 		GameState g = gs.peek();
-		g.update(); // Update current gamestate
+		g.update(dt); // Update current gamestate
 		
 		// Pop a gamestate when it is finished, and push the next gamestate if there is one
 		if (g.isDone())
@@ -121,6 +122,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		// Loops while running calling update 60 times per second
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
+		double dt = 1.0 / amountOfTicks;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -129,7 +131,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while (delta >= 1) {
-				update();
+				update(dt);
 				repaint(); // Calls the paintcomponent method
 				delta--;
 			}

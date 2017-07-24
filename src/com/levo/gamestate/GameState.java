@@ -25,7 +25,7 @@ public abstract class GameState {
 
 	// Abstract methods to be implemented by concrete gamestates suchas PlayState or MainMenuState
 	public abstract void draw(Graphics2D g);
-	public abstract void update();
+	public abstract void update(double dt);
 
 	// Returning anything non null will cause that gamestate to be pushed on the gamestate stack
 	public GameState nextState() {

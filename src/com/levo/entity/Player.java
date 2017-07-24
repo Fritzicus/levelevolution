@@ -103,7 +103,7 @@ public class Player extends Entity {
 		if (onGround) 
 			vel.x *= GROUND_SPEED_MULTIPLIER;
 		
-		aabb.addVec(vel); // Move position by vel vector
+		aabb.moveBy(vel); // Move position by vel vector
 		
 		// If on wall, lower gravity to give a sliding down effect
 		if ((onLeftWall || onRightWall) && vel.y > 0)
@@ -144,7 +144,7 @@ public class Player extends Entity {
 				
 				if (c.getDepth() >= 0) {
 					// Resolve collision by moving player back in the direction of the normal
-					aabb.addVec(c.getNormal().scaled(c.getDepth()));
+					aabb.moveBy(c.getNormal().scaled(c.getDepth()));
 				}
 			}
 		}

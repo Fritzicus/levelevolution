@@ -17,7 +17,7 @@ public class MainMenuState extends GameState {
 		Game.drawStringCentered(g, "<Press anything to continue>", 200, 370);
 	}
 
-	public void update() {
+	public void update(double dt) {
 		// Currently exits Main menu and starts a PlayState when any key is pressed
 		for (boolean b : keyDown) {
 			if (b) {

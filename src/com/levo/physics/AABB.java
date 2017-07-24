@@ -2,12 +2,10 @@ package com.levo.physics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-
 // TODO Hopefully deprecate this class when more serious physics comes along
 
 // (Axis Aligned Bounding Box)
-public class AABB {
-	
+public class AABB extends Body {
 	// Position A is a point vector for the top left of the rectangle
 	public Vec2 posA;
 	// Position B is a point vector for the bottom right of the rectangle
@@ -15,17 +13,24 @@ public class AABB {
 	// Represent the width and the height of the rectangle
 	private double width, height;
 	
+	private double mass;
+	private double invMass;
+	
 	//Initialize AABB with given vectors
-	public AABB(Vec2 posA, Vec2 posB) {
+	public AABB(Vec2 posA, Vec2 posB, Material mat) {
+		super(mat);
 		this.posA = posA;
 		this.posB = posB;
 		this.width = posB.x - posA.x;
 		this.height = posB.y - posA.y;
+		
+		mass = Body.UNDEFINED_MASS;
+		invMass = Body.UNDEFINED_MASS;
 	}
 	
 	// Initialize AABB with given location vector and width/height values
 	public AABB(Vec2 posA, int width, int height) {
-		this(posA, new Vec2(posA.x + width, posA.y + height));
+		this(posA, new Vec2(posA.x + width, posA.y + height), Material.WOOD);
 	}
 	
 	// Calculate fill area and draw object
@@ -34,8 +39,13 @@ public class AABB {
 		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
 	}
 	
+	public void draw(Graphics2D g) {
+		g.setColor(mat.color());		
+		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
+	}
+	
 	// Shift AABB by a vector
-	public void addVec(Vec2 v) {
+	public void moveBy(Vec2 v) {
 		posA.add(v);
 		posB.add(v);
 	}
@@ -73,5 +83,25 @@ public class AABB {
 	// Returns a Vec2 representing the center of the AABB
 	public Vec2 centerPoint() {
 		return posA.added(new Vec2(width / 2, height / 2));
+	}
+
+	public double getMass() {
+		if (mass == Body.UNDEFINED_MASS) {
+			mass = width * height * mat.density();
+		}
+		return mass;
+	}
+
+	public double getMassInv() {
+		if (mass == Body.UNDEFINED_MASS)
+			getMass();
+		if (invMass == Body.UNDEFINED_MASS) {
+			if (mass == Body.INFINITE_MASS) {
+				invMass = 0;
+			} else {
+				invMass = 1 / mass;
+			}
+		}
+		return invMass;
 	}
 }

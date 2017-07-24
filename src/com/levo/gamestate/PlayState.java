@@ -54,7 +54,7 @@ public class PlayState extends GameState {
 		Game.drawStringCentered(g, "Level 1", 200, 10);
 	}
 
-	public void update() {
+	public void update(double dt) {
 		// Update player, blocks, camera
 		p.update();
 		p.handleCollisions(blocks);
