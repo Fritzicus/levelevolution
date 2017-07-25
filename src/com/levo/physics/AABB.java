@@ -34,8 +34,7 @@ public class AABB {
 	}
 	
 	public void draw(Graphics2D g, BufferedImage frame) {
-		g.drawImage(frame, (int) posA.x, (int) posA.y, (int)width, (int)height, null);
-		g.finalize();
+		g.drawImage(frame, (int) posA.x, (int) posA.y, (int) width, (int) height, null);
 	}
 	
 	// Shift AABB by a vector

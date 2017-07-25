@@ -42,8 +42,7 @@ public class Player extends Entity {
 	
 	public void draw(Graphics2D g) {
 		aabb.draw(g, new Color(102, 0, 204));
-		//aabb.draw(g, sprite.getImage());
-		
+		aabb.draw(g, sprite.getImage());
 	}
 	
 	public void update() {
