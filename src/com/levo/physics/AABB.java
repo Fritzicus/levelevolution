@@ -2,6 +2,7 @@ package com.levo.physics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 // TODO Hopefully deprecate this class when more serious physics comes along
 
@@ -30,6 +31,11 @@ public class AABB {
 	public void draw(Graphics2D g, Color c) {
 		g.setColor(c);		
 		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
+	}
+	
+	public void draw(Graphics2D g, BufferedImage frame) {
+		g.drawImage(frame, (int) posA.x, (int) posA.y, (int)width, (int)height, null);
+		g.finalize();
 	}
 	
 	// Shift AABB by a vector

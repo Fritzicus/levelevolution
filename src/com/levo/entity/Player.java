@@ -25,6 +25,8 @@ public class Player extends Entity {
 	private boolean[] keyDown;
 	private int noMoveCooldown;
 	
+	private Animation[] animations;
+	
 	// Initialize with position
 	public Player(Vec2 pos, boolean[] keyDown) {
 		aabb = new AABB(pos, 10, 20); 
@@ -33,10 +35,15 @@ public class Player extends Entity {
 		onGround = false;
 		this.keyDown = keyDown;
 		noMoveCooldown = 0;
+		
+		
+		this.sprite = new Sprite(256, 256, 1, 6, "res/spritestrip.png");
 	}
 	
 	public void draw(Graphics2D g) {
 		aabb.draw(g, new Color(102, 0, 204));
+		//aabb.draw(g, sprite.getImage());
+		
 	}
 	
 	public void update() {
