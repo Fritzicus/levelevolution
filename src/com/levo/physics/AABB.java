@@ -33,8 +33,12 @@ public class AABB {
 		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
 	}
 	
-	public void draw(Graphics2D g, BufferedImage frame) {
-		g.drawImage(frame, (int) posA.x, (int) posA.y, (int) width, (int) height, null);
+	public void draw(Graphics2D g, BufferedImage frame, int direction) {
+		int xval = (int) posA.x;
+		if(direction == -1)
+			xval += (int) width;
+			
+		g.drawImage(frame, xval, (int) posA.y, direction* (int) width, (int) height, null);
 	}
 	
 	// Shift AABB by a vector

@@ -1,6 +1,5 @@
 package com.levo.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -25,27 +24,32 @@ public class Player extends Entity {
 	private boolean[] keyDown;
 	private int noMoveCooldown;
 	
-	private Animation[] animations;
+	private Animation currentAnimation, idle, walk, jump;
 	
 	// Initialize with position
 	public Player(Vec2 pos, boolean[] keyDown) {
-		aabb = new AABB(pos, 10, 20); 
+		aabb = new AABB(pos, 50, 50); 
 		vel = new Vec2(0, 0);
 		onWall = false;
 		onGround = false;
 		this.keyDown = keyDown;
 		noMoveCooldown = 0;
-		
-		
+				
 		this.sprite = new Sprite(256, 256, 1, 6, "res/spritestrip.png");
+		
+		//sprite.makeAnimation((row animation is in), (beginning frame in that row), (ending frame in row) );
+		idle = sprite.makeAnimation(0, 0, 0);
+		walk = sprite.makeAnimation(0, 0, 5);
+		
+		currentAnimation = idle;
 	}
 	
-	public void draw(Graphics2D g) {
-		aabb.draw(g, new Color(102, 0, 204));
-		aabb.draw(g, sprite.getImage());
+	public void draw(Graphics2D g) {		
+		aabb.draw(g, currentAnimation.getCurrentFrame(), currentAnimation.direction);
 	}
 	
 	public void update() {
+		//walk.Play();
 		if (keyDown[KeyEvent.VK_SPACE] && !jumpKeyDown) {
 			if (onGround && vel.y == 0) {
 				vel.y = JUMP_VELOCITY;
@@ -53,6 +57,7 @@ public class Player extends Entity {
 				vel.y = JUMP_VELOCITY;
 				vel.x = SPEED;
 				noMoveCooldown = 15;
+
 			} else if (onWall && keyDown[KeyEvent.VK_D]) {
 				vel.y = JUMP_VELOCITY;
 				vel.x = -SPEED;
@@ -62,13 +67,29 @@ public class Player extends Entity {
 		jumpKeyDown = keyDown[KeyEvent.VK_SPACE];
 				
 		if (noMoveCooldown <= 0) {
+			
 			vel.x = 0;
 			if (keyDown[KeyEvent.VK_A] || keyDown[KeyEvent.VK_LEFT]) {
 				vel.x = -SPEED;
+				walk.Play();
+				walk.direction = -1;
+				if(currentAnimation != walk)
+					currentAnimation = walk;
 			} 
+			else {
+				int dir = currentAnimation.direction;
+				currentAnimation = idle;
+				currentAnimation.direction = dir;
+			}
+			
 			if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
 				vel.x = SPEED;
+				walk.Play();
+				walk.direction = 1;
+				if(currentAnimation != walk)
+					currentAnimation = walk;
 			}
+
 		} else {
 			noMoveCooldown--;
 		}

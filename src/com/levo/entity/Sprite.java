@@ -35,9 +35,13 @@ public class Sprite {
 		}
 	}
 
-	public BufferedImage getImage() {
-		System.out.println(sprites[0][0]);
-		return sprites[0][0];
+	public BufferedImage getImage(int row, int col) {
+		//System.out.println(sprites[0][0]);
+		return sprites[row][col];
+	}
+	
+	public Animation makeAnimation(int row, int begin, int end) {
+		return new Animation(this, row, begin, end);
 	}
 
 }
