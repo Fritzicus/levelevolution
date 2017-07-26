@@ -1,9 +1,5 @@
 package com.levo.physics;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 // TODO Hopefully deprecate this class when more serious physics comes along
 
 //(Axis Aligned Bounding Box)
@@ -11,7 +7,7 @@ public class AABB {
 	
 	public Vec2 posA;
 	private Vec2 posB;
-	private double width, height;
+	public double width, height;
 	
 	//Initialize AABB with given vectors
 	public AABB(Vec2 posA, Vec2 posB) {
@@ -25,20 +21,6 @@ public class AABB {
 	// Initialize AABB with given location vector and width/height values
 	public AABB(Vec2 posA, int width, int height) {
 		this(posA, new Vec2(posA.x + width, posA.y + height));
-	}
-	
-	// Calculate fill area and draw object
-	public void draw(Graphics2D g, Color c) {
-		g.setColor(c);		
-		g.fillRect((int) posA.x, (int) posA.y, (int) width, (int) height);
-	}
-	
-	public void draw(Graphics2D g, BufferedImage frame, int direction) {
-		int xval = (int) posA.x;
-		if(direction == -1)
-			xval += (int) width;
-			
-		g.drawImage(frame, xval, (int) posA.y, direction* (int) width, (int) height, null);
 	}
 	
 	// Shift AABB by a vector

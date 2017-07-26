@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 
 import com.levo.physics.Vec2;
 
+import graphics.Sprite;
+
 public abstract class Entity {
 
 	// TODO, find things to be abstracted into Entity class (physics? sprite?) If nothing is found, remove entity class

@@ -17,7 +17,9 @@ public class Block extends Entity {
 	}
 	
 	public void draw(Graphics2D g) {
-		aabb.draw(g, color);
+		//aabb.draw(g, color);
+		g.setColor(color);
+		g.fillRect((int) aabb.posA.x, (int) aabb.posA.y, (int) aabb.width, (int) aabb.height);
 	}
 	
 	public AABB getAABB() {

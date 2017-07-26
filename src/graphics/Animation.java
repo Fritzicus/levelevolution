@@ -1,4 +1,4 @@
-package com.levo.entity;
+package graphics;
 
 import java.awt.image.BufferedImage;
 
@@ -18,8 +18,7 @@ public class Animation {
 		
 		currentFrame = 0;
 		for(int i = begin; i < end +1; i++) {
-			frames[currentFrame] = sp.getImage(r, i);
-			System.out.println(frames[currentFrame]);
+			frames[currentFrame] = sp.getFrame(r, i);
 			currentFrame++;
 		}
 		currentFrame = 0;
@@ -41,6 +40,6 @@ public class Animation {
 	}
 	
 	public BufferedImage getCurrentFrame() {
-				return frames[currentFrame];
+		return frames[currentFrame];
 	}
 }

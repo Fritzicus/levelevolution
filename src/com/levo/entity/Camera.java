@@ -29,6 +29,8 @@ public class Camera {
 		g.translate(-x, -y);
 	}
 	
+	
+	
 	public void update() {
 		Vec2 centerPoint = tracking.centerPoint();
 		if (centerPoint.x > pos.x + X_DIST_TOLERANCE)

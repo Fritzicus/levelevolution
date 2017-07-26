@@ -7,9 +7,9 @@ import java.util.List;
 
 import com.levo.entity.Camera;
 import com.levo.entity.Entity;
-import com.levo.entity.GenerateLevel;
 import com.levo.entity.Player;
 import com.levo.game.Game;
+import com.levo.game.GenerateLevel;
 import com.levo.physics.Vec2;
 import com.sun.glass.events.KeyEvent;
 
@@ -34,7 +34,7 @@ public class PlayState extends GameState {
 		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
 		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
 		*/
-		p = new Player(new Vec2(10, -10), keyDown);
+		p = new Player(new Vec2(200, 500), keyDown);
 
 		cam = new Camera(p);
 		

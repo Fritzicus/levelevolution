@@ -9,6 +9,9 @@ import com.levo.physics.AABB;
 import com.levo.physics.Collision;
 import com.levo.physics.Vec2;
 
+import graphics.Animation;
+import graphics.Sprite;
+
 public class Player extends Entity {
 	public static final double JUMP_VEL = -5.5;
 	public static final double SPEED = 2.5;
@@ -24,7 +27,7 @@ public class Player extends Entity {
 	private boolean[] keyDown;
 	private int noMoveCooldown;
 	
-	private Animation currentAnimation, idle, walk, jump;
+	private Animation current, idle, walk, jump;
 	
 	// Initialize with position
 	public Player(Vec2 pos, boolean[] keyDown) {
@@ -35,17 +38,22 @@ public class Player extends Entity {
 		this.keyDown = keyDown;
 		noMoveCooldown = 0;
 				
-		this.sprite = new Sprite(256, 256, 1, 6, "res/spritestrip.png");
+		//new Sprite(frame width, frame height, number of rows, number of columns, source);
+		this.sprite = new Sprite(250, 250, 1, 6, "res/spritestrip.png");
 		
 		//sprite.makeAnimation((row animation is in), (beginning frame in that row), (ending frame in row) );
 		idle = sprite.makeAnimation(0, 0, 0);
 		walk = sprite.makeAnimation(0, 0, 5);
 		
-		currentAnimation = idle;
+		current = idle;
 	}
 	
-	public void draw(Graphics2D g) {		
-		aabb.draw(g, currentAnimation.getCurrentFrame(), currentAnimation.direction);
+	public void draw(Graphics2D g) {	
+		int xval = (int) aabb.posA.x;
+		if(current.direction == -1)
+			xval += (int) aabb.width;
+			
+		g.drawImage(current.getCurrentFrame(), xval, (int) aabb.posA.y, current.direction* (int) aabb.width, (int) aabb.height, null);
 	}
 	
 	public void update() {
@@ -73,21 +81,21 @@ public class Player extends Entity {
 				vel.x = -SPEED;
 				walk.Play();
 				walk.direction = -1;
-				if(currentAnimation != walk)
-					currentAnimation = walk;
+				if(current != walk)
+					current = walk;
 			} 
 			else {
-				int dir = currentAnimation.direction;
-				currentAnimation = idle;
-				currentAnimation.direction = dir;
+				int dir = current.direction;
+				current = idle;
+				current.direction = dir;
 			}
 			
 			if (keyDown[KeyEvent.VK_D] || keyDown[KeyEvent.VK_RIGHT]) {
 				vel.x = SPEED;
 				walk.Play();
 				walk.direction = 1;
-				if(currentAnimation != walk)
-					currentAnimation = walk;
+				if(current != walk)
+					current = walk;
 			}
 
 		} else {
