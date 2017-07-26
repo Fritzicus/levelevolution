@@ -13,21 +13,21 @@ import com.levo.game.Camera;
 import com.levo.physics.AABB;
 import com.levo.physics.Body;
 import com.levo.physics.Circle;
-import com.levo.physics.Collision;
 import com.levo.physics.Material;
+import com.levo.physics.PhysicsEngine;
 import com.levo.physics.Vec2;
 import com.sun.glass.events.KeyEvent;
 
 public class PhysicsState extends GameState {
 
-	private List<Body> bodies;
+	private PhysicsEngine engine;
 	private Camera cam;
 	private Entity viewer;
 	private Body selected;
 	private Vec2 mouseCoord;
 	
 	public PhysicsState() {
-		bodies = new ArrayList<Body>();
+		List<Body> bodies = new ArrayList<Body>();
 		bodies.add(new AABB(new Vec2(-200, 380), 800, 80, Material.IMMOVEABLE));
 		bodies.add(new AABB(new Vec2(-280, 300), 80, 160, Material.IMMOVEABLE));
 		bodies.add(new AABB(new Vec2(600, 300), 80, 160, Material.IMMOVEABLE));
@@ -35,6 +35,8 @@ public class PhysicsState extends GameState {
 			bodies.add(new AABB(new Vec2(370 * Math.random(), 330 * Math.random()), 30, 30, Material.WOOD));
 			bodies.add(new Circle(new Vec2(10 + 380 * Math.random(), 10 + Math.random() * 300), 10, Material.RUBBER));
 		}
+		
+		engine = new PhysicsEngine(bodies);
 		
 		viewer = new Entity() {
 			private static final int SPEED = 150;
@@ -63,13 +65,11 @@ public class PhysicsState extends GameState {
 	
 	public void draw(Graphics2D g) {
 		cam.activate(g);
-		for (Body b : bodies) {
-			b.draw(g);
-		}
+		engine.draw(g);
 		if (selected != null) {
 			g.setColor(Color.GREEN);
 			g.fill(new Ellipse2D.Double(selected.centerPoint().x - 1.5, selected.centerPoint().y - 1.5, 3, 3));
-			g.draw(new Line2D.Double(selected.centerPoint().x, selected.centerPoint().y, mouseCoord.x, mouseCoord.y));
+			g.draw(new Line2D.Double(selected.centerPoint().x, selected.centerPoint().y, cam.getCoordinate(mouseCoord).x, cam.getCoordinate(mouseCoord).y));
 		}
 		cam.deactivate(g);
 	}
@@ -79,35 +79,20 @@ public class PhysicsState extends GameState {
 		viewer.update(dt);
 		
 		if (selected != null) {
-			selected.applyForce(mouseCoord.subtracted(selected.centerPoint()).scaled(150));
+			selected.applyForce(cam.getCoordinate(mouseCoord).subtracted(selected.centerPoint()).scaled(150));
 		}
 		
-		for (Body b : bodies) {
-			b.applyForce(new Vec2(0, 1).scaled(b.getMass()));
-			b.update(dt);
-			for (Body other : bodies) {
-				if (b != other && b.isColliding(other)) {
-					Collision c = b.getCollision(other);
-					b.resolveCollision(c, other);
-				}
-			}
-		}
+		engine.update(dt);
 	}
 	
 	public void mousePressed(MouseEvent e) {
-		Vec2 v = cam.getCoordinate(e);
-		for (Body b : bodies) {
-			if (b.containsPoint(v)) {
-				selected = b;
-				mouseCoord = v;
-				break;
-			}
-		}
+		mouseCoord = new Vec2(e.getX(), e.getY());
+		selected = engine.getBodyAtCoord(cam.getCoordinate(mouseCoord));
 	}
 	
 	public void mouseDragged(MouseEvent e) {
 		if (selected != null) {
-			mouseCoord = cam.getCoordinate(e);
+			mouseCoord = new Vec2(e.getX(), e.getY());
 		}
 	}
 	

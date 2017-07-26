@@ -111,13 +111,21 @@ public class Vec2 {
 	// Normalize vector (Creates a length 1 vector)
 	public void normalize() {
 		double len = length();
-		x /= len;
-		y /= len;
+		if (len == 0) {
+			x = 1;
+		} else {
+			x /= len;
+			y /= len;
+		}
 	}
 	
 	// Return normalized vector
 	public Vec2 normalized() {
-		return new Vec2(x / length(), y / length());
+		double len = length();
+		if (len == 0) {
+			return new Vec2(1, 0);
+		}
+		return new Vec2(x / len, y / len);
 	}
 	
 	// Convert vector data to string

@@ -8,8 +8,6 @@ public abstract class Body implements Drawable {
 	public static final double UNDEFINED_MASS = -1;
 	public static final double INFINITE_MASS = 0;
 
-	public static final double POSITIONAL_CORRECTION = 0.5;
-	public static final double SLOP = 0.01;
 	
 	protected double mass;
 	protected double invMass;
@@ -32,7 +30,6 @@ public abstract class Body implements Drawable {
 	public abstract Vec2 centerPoint();
 	public abstract boolean containsPoint(Vec2 p);
 	public abstract boolean isColliding(Body b);
-	public abstract Collision getCollision(Body b);
 	
 	public void update(double dt) {
 		moveBy(vel.scaled(dt));
@@ -43,27 +40,6 @@ public abstract class Body implements Drawable {
 	
 	public void applyForce(Vec2 f) {
 		force.add(f);
-	}
-	
-	public void resolveCollision(Collision c, Body b) {
-		if (c == null)
-			return;
-		double velAlongNormal = b.vel.subtracted(vel).dot(c.getNormal());
-		if (velAlongNormal > 0)
-			return;
-		
-		double restitution = Math.min(mat.restitution(), b.mat.restitution());
-		double magnitude = (-(1 + restitution) * velAlongNormal) / (getMassInv() + b.getMassInv());
-		
-		Vec2 impulse = c.getNormal().scaled(magnitude);
-		vel.subtract(impulse.scaled(getMassInv()));
-		b.vel.add(impulse.scaled(b.getMassInv()));
-		
-		if (c.getDepth() > SLOP) {
-			Vec2 positionalCorrection = c.getNormal().scaled((c.getDepth() - SLOP) * POSITIONAL_CORRECTION / (getMassInv() + b.getMassInv()));
-			moveBy(positionalCorrection.scaled(-getMassInv()));
-			b.moveBy(positionalCorrection.scaled(b.getMassInv()));
-		}
 	}
 	
 	public double getMass() {
@@ -90,4 +66,5 @@ public abstract class Body implements Drawable {
 	public Material getMaterial() {
 		return mat;
 	}
+	
 }

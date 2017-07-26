@@ -56,36 +56,31 @@ public class AABB extends Body {
 			return !(other.posB.y <= posA.y || other.posB.x <= posA.x || other.posA.x >= posB.x
 					|| other.posA.y >= posB.y);
 		} else {
-			return false;
+			return b.isColliding(this);
 		}
 	}
 
 	// Gets the collision object for a collision with another AABB
-	public Collision getCollision(Body b) {
-		if (b instanceof AABB) {
-			AABB other = (AABB) b;
-			// Calculates x and y overlap between both AABBs
-			double xOverlap = Math.min(other.posB.x - posA.x, posB.x - other.posA.x);
-			double yOverlap = Math.min(posB.y - other.posA.y, other.posB.y - posA.y);
+	public Collision getCollision(AABB other) {
+		// Calculates x and y overlap between both AABBs
+		double xOverlap = Math.min(other.posB.x - posA.x, posB.x - other.posA.x);
+		double yOverlap = Math.min(posB.y - other.posA.y, other.posB.y - posA.y);
 
-			// The smaller overlap is the axis the collision occurred on.
-			if (xOverlap > yOverlap) {
-				// Collision occurred in Y axis, now check if top or bottom
-				if (posA.y > other.posA.y) {
-					return new Collision(new Vec2(3 * Math.PI / 2), yOverlap);
-				} else {
-					return new Collision(new Vec2(Math.PI / 2), yOverlap);
-				}
+		// The smaller overlap is the axis the collision occurred on.
+		if (xOverlap > yOverlap) {
+			// Collision occurred in Y axis, now check if top or bottom
+			if (posA.y > other.posA.y) {
+				return new Collision(new Vec2(3 * Math.PI / 2), yOverlap);
 			} else {
-				// Collision occurred in X axis, now check if left or right
-				if (posA.x > other.posA.x) {
-					return new Collision(new Vec2(Math.PI), xOverlap);
-				} else {
-					return new Collision(new Vec2(0), xOverlap);
-				}
+				return new Collision(new Vec2(Math.PI / 2), yOverlap);
 			}
 		} else {
-			return null;
+			// Collision occurred in X axis, now check if left or right
+			if (posA.x > other.posA.x) {
+				return new Collision(new Vec2(Math.PI), xOverlap);
+			} else {
+				return new Collision(new Vec2(0), xOverlap);
+			}
 		}
 	}
 
