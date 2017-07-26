@@ -3,7 +3,7 @@ package com.levo.physics;
 // Collision contains information about a collision event that can be used to resolve collisions
 public class Collision {
 	public static final double POSITIONAL_CORRECTION = 0.8;
-	public static final double SLOP = 0.00;
+	public static final double SLOP = 0.01;
 	
 	// Collision normal is perpendicular to the colliding surfaces, giving the direction collision occured in
 	private Vec2 normal;
@@ -26,7 +26,8 @@ public class Collision {
 	public void resolve() {
 		if (depth <= 0)
 			return;
-		double velAlongNormal = b.vel.subtracted(a.vel).dot(normal);
+		Vec2 relativeVel = b.vel.subtracted(a.vel);
+		double velAlongNormal = relativeVel.dot(normal);
 		if (velAlongNormal > 0)
 			return;
 		
@@ -37,6 +38,21 @@ public class Collision {
 		a.vel.subtract(impulse.scaled(a.getMassInv()));
 		b.vel.add(impulse.scaled(b.getMassInv()));
 		
+		
+		Vec2 tangent = relativeVel.subtracted(normal.scaled(normal.dot(relativeVel))).normalized();
+		double velAlongTangent = relativeVel.dot(tangent);
+		double tanMagnitude = (-(1 + restitution) * velAlongTangent) / (a.getMassInv() + b.getMassInv());
+		double friction = Material.combinedFriction(a.getMaterial().staticFriction(), b.getMaterial().staticFriction());
+		Vec2 frictionImpulse = null;
+		if (Math.abs(tanMagnitude) < magnitude * friction) {
+			frictionImpulse = tangent.scaled(tanMagnitude);
+		} else {
+			friction = Material.combinedFriction(a.getMaterial().staticFriction(), b.getMaterial().staticFriction());
+			frictionImpulse = tangent.scaled(- magnitude * friction);
+		}
+		a.vel.subtract(frictionImpulse.scaled(a.getMassInv()));
+		b.vel.add(frictionImpulse.scaled(b.getMassInv()));
+	
 		if (depth > SLOP) {
 			Vec2 positionalCorrection = normal.scaled((depth - SLOP) * POSITIONAL_CORRECTION / (a.getMassInv() + b.getMassInv()));
 			a.moveBy(positionalCorrection.scaled(-a.getMassInv()));

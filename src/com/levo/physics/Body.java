@@ -7,7 +7,6 @@ import com.levo.game.Drawable;
 public abstract class Body implements Drawable {
 	public static final double UNDEFINED_MASS = -1;
 	public static final double INFINITE_MASS = 0;
-
 	
 	protected double mass;
 	protected double invMass;
