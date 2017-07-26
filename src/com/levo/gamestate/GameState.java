@@ -3,10 +3,11 @@ package com.levo.gamestate;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
+import com.levo.game.Drawable;
+
 // Top level class representing a game state such as the main menu, a level, or paused state
-public abstract class GameState {
-	
-	// Signifies that this gamestate is finished executing and to go the the previus game state
+public abstract class GameState implements Drawable {
+	// Signifies that this gamestate is finished executing and to go the the previous game state
 	private boolean done;
 	// Tells Game what GameState to enter next
 	private GameState nextState;
@@ -63,7 +64,7 @@ public abstract class GameState {
 
 	public void mouseExited(MouseEvent e) {}
 
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) { }
 	
 	public void mouseReleased(MouseEvent e) {}
 

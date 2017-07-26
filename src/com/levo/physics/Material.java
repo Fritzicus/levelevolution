@@ -4,7 +4,8 @@ import java.awt.Color;
 
 public enum Material {
 	WOOD (5, .2, new Color(130, 82, 1)),
-	RUBBER (10, .8, new Color(11, 38, 81));
+	RUBBER (10, .8, new Color(11, 38, 81)),
+	IMMOVEABLE (0, .5, Color.DARK_GRAY);
 
 	private double density;
 	private double restitution;

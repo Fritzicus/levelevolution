@@ -8,6 +8,7 @@ import java.util.List;
 import com.levo.game.Game;
 import com.levo.physics.AABB;
 import com.levo.physics.Collision;
+import com.levo.physics.Material;
 import com.levo.physics.Vec2;
 
 public class Player extends Entity {
@@ -49,7 +50,7 @@ public class Player extends Entity {
 	// Also passes a reference to keyDown array so when keyDown is updated in GameState.java, 
 	// the player keyDown array is effected
 	public Player(Vec2 pos, boolean[] keyDown) {
-		aabb = new AABB(pos, WIDTH, HEIGHT); 
+		aabb = new AABB(pos, WIDTH, HEIGHT, Material.RUBBER); 
 		vel = new Vec2(0, 0);
 		jumpKeyDown = false;
 		onLeftWall = false;
@@ -64,7 +65,7 @@ public class Player extends Entity {
 		aabb.draw(g, COLOR);
 	}
 	
-	public void update() {
+	public void update(double dt) {
 		// Tests if the jump key is down and we haven't already recorded it. 
 		// This ensures that jump only triggers when jump key is initially pressed, not if held down
 		if (keyDown[KeyEvent.VK_SPACE] && !jumpKeyDown) {

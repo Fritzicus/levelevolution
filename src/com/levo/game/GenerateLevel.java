@@ -1,8 +1,10 @@
-package com.levo.entity;
+package com.levo.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
+import com.levo.entity.Block;
+import com.levo.entity.Entity;
 import com.levo.physics.Vec2;
 
 public class GenerateLevel {

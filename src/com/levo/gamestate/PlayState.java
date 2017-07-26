@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.levo.entity.Camera;
 import com.levo.entity.Entity;
-import com.levo.entity.GenerateLevel;
 import com.levo.entity.Player;
+import com.levo.game.Camera;
 import com.levo.game.Game;
+import com.levo.game.GenerateLevel;
 import com.levo.physics.Vec2;
 import com.sun.glass.events.KeyEvent;
 
@@ -56,9 +56,9 @@ public class PlayState extends GameState {
 
 	public void update(double dt) {
 		// Update player, blocks, camera
-		p.update();
+		p.update(dt);
 		p.handleCollisions(blocks);
-		cam.update();
+		cam.update(dt);
 		
 		// On escape, close the game
 		if (keyDown[KeyEvent.VK_ESCAPE]) {

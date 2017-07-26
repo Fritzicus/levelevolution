@@ -35,6 +35,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	
 	private boolean running = false; // Bool for when Tread is running
 	private Stack<GameState> gs; // Stack of running gamestates (operates like a call stack)
+	private double scale;
 	
 	public Game() {
 		// Size of JFrame window
@@ -66,10 +67,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		f.setVisible(true);
 		
 		running = true;
+		scale = Math.min(size.width, size.height) / 400;
 	}
 	
 	public void paintComponent(Graphics g) {
-		// Init G2D and fill xcreen with black
+		// Init G2D and fill screen with black
 		double width = getSize().getWidth(), height = getSize().getHeight();
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.BLACK);
@@ -81,7 +83,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		} else {
 			g2d.translate(0, (height - width) / 2);			
 		}
-		g2d.scale(Math.min(width, height) / 400, Math.min(width, height) / 400);
+		scale = Math.min(width, height) / 400;
+		g2d.scale(scale, scale);
 		
 		g2d.setFont(FONT);
 		
@@ -149,6 +152,12 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		y += metrics.getHeight() / 3;
 		g.drawString(msg, x, y);
 	}
+	
+	private void correctMouseEvent(MouseEvent e) {
+		int x = (int) (e.getX() / scale);
+		int y = (int) (e.getY() / scale);
+		e.translatePoint(x - e.getX(), y - e.getY());
+	}
 
 	// Mouse and Key event handlers below. (Called when mouse does actions and keys are pressed and released)
 	public void keyPressed(KeyEvent e) { 
@@ -163,17 +172,45 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	
 	public void keyTyped(KeyEvent e) { } // don't dispatch to gs because it isn't useful
 	
-	public void mouseClicked(MouseEvent e) {  }
+	public void mouseClicked(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseClicked(e); 
+	}
 
-	public void mouseEntered(MouseEvent e) {  }
+	public void mouseEntered(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseEntered(e); 
+	}
 
-	public void mouseExited(MouseEvent e) { }
+	public void mouseExited(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseExited(e); 
+	}
 
-	public void mousePressed(MouseEvent e) {  }
+	public void mousePressed(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mousePressed(e); 
+	}
 	
-	public void mouseReleased(MouseEvent e) { }
+	public void mouseReleased(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseReleased(e); 
+	}
 
-	public void mouseDragged(MouseEvent e) { }
+	public void mouseDragged(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseDragged(e);
+	}
 
-	public void mouseMoved(MouseEvent e) { }
+	public void mouseMoved(MouseEvent e) { 
+		if (!gs.isEmpty())
+			correctMouseEvent(e);
+			gs.peek().mouseMoved(e); 
+	}
 }

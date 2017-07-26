@@ -23,6 +23,10 @@ public class Vec2 {
 			y = 0;
 	}
 	
+	public Vec2() {
+		this(0, 0);
+	}
+	
 	// Get angle from current x-y values
 	public double angle() {
 		return Math.atan2(y, x);

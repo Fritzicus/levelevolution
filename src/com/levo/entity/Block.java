@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.levo.physics.AABB;
+import com.levo.physics.Material;
 import com.levo.physics.Vec2;
 
 // Represents a solid block that the player can jump and move around on
@@ -14,7 +15,7 @@ public class Block extends Entity {
 	private Color color;
 	
 	public Block(Vec2 pos, int w, int h, Color color) {
-		aabb = new AABB(pos, w, h);
+		aabb = new AABB(pos, w, h, Material.WOOD);
 		this.color = color;
 	}
 	
