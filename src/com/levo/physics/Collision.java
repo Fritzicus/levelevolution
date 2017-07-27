@@ -113,7 +113,7 @@ public class Collision {
 			double xDiff2 = b.getPosB().x - closestPoint.x;
 			double yDiff1 = closestPoint.y - b.getPosA().y;
 			double yDiff2 = b.getPosB().y - closestPoint.y;
-			if (Math.min(yDiff1, yDiff2) < Math.min(xDiff1, xDiff2)) {
+			if (Math.min(yDiff1, yDiff2) > Math.min(xDiff1, xDiff2)) {
 				if (xDiff1 < xDiff2) {
 					closestPoint.x -= xDiff1;
 				} else {
