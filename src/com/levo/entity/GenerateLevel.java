@@ -23,16 +23,6 @@ public class GenerateLevel {
 		this.levelMap = new int[levelX][levelY];
 	}
 
-	
-	private int[][] connectRooms(int[][] overlayMap) {
-		
-		for (int i = 0; i < levelX; i++) {
-			for (int j = 0; j < levelY; j++) {
-				overlayMap[i][j] = levelMap[i][j];
-			}
-		}
-		return overlayMap;
-	}
 	public ArrayList<Entity> generateTerrain() {
 		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
 		Random rand = new Random();
@@ -80,8 +70,9 @@ public class GenerateLevel {
 			}else {
 				errors++;
 			}
-			if(errors > 1000) { // prevents the room generation from potentially getting stuck in an infinite loop.
+			if(errors > 100000) { // prevents the room generation from potentially getting stuck in an infinite loop.
 				errors = 0;
+				System.out.println("Lots of errors");
 				roomsCompleted++;
 			}
 			// System.out.println(maxOverlap);
@@ -99,29 +90,6 @@ public class GenerateLevel {
 			System.out.println("");
 		}
 		
-		
-		/*
-		ArrayList<int> currentRoom = new ArrayList<int>();
-		for (int i = 1; i < levelX -1 ; i++) {
-			for (int j = 1; j < levelY -1; j++) {
-				if(overlayMap[i][j]!=0) {
-					currentRoom = overlayMap[i][j];
-					if(overlayMap[i+1][j]!=) {
-						
-					}
-					if(overlayMap[i-1][j]) {
-						
-					}
-					if(overlayMap[i][j+1]) {
-						
-					}
-					if(overlayMap[i][j-1]) {
-						
-					}
-				}
-			}
-		}
-		*/
 		/*
 
 		for (int i = 0; i < levelX; i++) {

@@ -18,21 +18,20 @@ public class Room {
 	
 	public double calculateOverlap(Room compare) {
 		
-		int intersectPosX= Math.min(this.posX, compare.posX);
-		int intersectPosY= Math.min(this.posY, compare.posY);
+		int intersectPosX= Math.max(this.posX, compare.posX);
+		int intersectPosY= Math.max(this.posY, compare.posY);
 		
-		//System.out.println(intersectPosX + " " + this.posX + " " + compare.posX);
-	    if(intersectPosX > Math.max((this.posX + this.sizeX), (compare.posX + compare.sizeX))) 
+	    if(intersectPosX > Math.max((this.posX + this.sizeX - 1), (compare.posX + compare.sizeX -1))) 
 	    		return 0.0;
-	    if(intersectPosY > Math.max((this.posY + this.sizeY), (compare.posY + compare.sizeY)))
+	    if(intersectPosY > Math.max((this.posY + this.sizeY - 1), (compare.posY + compare.sizeY -1)))
     		    return 0.0;
 	    
-	    int intersectSizeX = (Math.max((this.posX + this.sizeX), (compare.posX + compare.sizeX))) - intersectPosX - 1;
-	    int intersectSizeY = (Math.max((this.posY + this.sizeY), (compare.posY + compare.sizeY))) - intersectPosY - 1;
+	    int intersectSizeX = Math.max(0, (Math.min((this.posX + this.sizeX-1), (compare.posX + compare.sizeX-1))) - intersectPosX + 1);
+	    int intersectSizeY = Math.max(0, (Math.min((this.posY + this.sizeY-1), (compare.posY + compare.sizeY-1))) - intersectPosY + 1);
 	    
-	    System.out.println(  (this.posX + this.sizeX) + " " +  intersectSizeX + " " + intersectSizeY);
-	    if (intersectSizeX < 0 || intersectSizeY < 0)
-	    	return 0.0;
+	    // System.out.println(  (this.posX + this.sizeX) + " " +  + (compare.posX + compare.sizeX) + " " +intersectPosX + " " + intersectSizeX + " " + intersectSizeY);
+	    // System.out.println(  (this.posX + this.sizeX) + " " +  intersectSizeX + " " + intersectSizeY);
+	    
 	    if(intersectSizeX < 1 || intersectSizeY < 1) // return 0 if there is no intersect  area
 	    	return 0.0;	
 	   
