@@ -2,7 +2,7 @@ package com.levo.entity;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
+import java.util.Random;
 import com.levo.physics.Vec2;
 
 public class GenerateLevel {
@@ -17,71 +17,139 @@ public class GenerateLevel {
 		this.levelMap = new int[levelX][levelY];
 	}
 
-	public GenerateLevel(int[] genome) {
-		this.levelX = 10;
-		this.levelY = 10;
-		this.levelMap = new int[levelX][levelY];
-	}
-
 	public GenerateLevel(int levelX, int levelY) {
 		this.levelX = levelX;
 		this.levelY = levelY;
 		this.levelMap = new int[levelX][levelY];
 	}
 
+	
+	private int[][] connectRooms(int[][] overlayMap) {
+		
+		for (int i = 0; i < levelX; i++) {
+			for (int j = 0; j < levelY; j++) {
+				overlayMap[i][j] = levelMap[i][j];
+			}
+		}
+		return overlayMap;
+	}
 	public ArrayList<Entity> generateTerrain() {
 		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
-		for(int i = 0 ; i<levelX; i++) {
-			for(int j = 0; j <levelY; j++ ) {
-				levelMap[i][j]=0;
+		Random rand = new Random();
+		int roomsFactor = 20;
+		int maxNumberOfRooms = (levelX * levelY) / roomsFactor; // This will be adjusted based on generation
+		int roomsCompleted = 0;
+		int errors = 0;
+		int roomID = 0;
+		int blockScaleFactor = 5;
+		int [][]overlayMap = new int[levelX][levelY]; 
+		
+		ArrayList<Room> roomList = new ArrayList<Room>();
+		for (int i = 0; i < levelX; i++) {
+			for (int j = 0; j < levelY; j++) {
+				levelMap[i][j] = 1;
+				overlayMap[i][j]= 0;
 			}
 		}
 		
-		/// This segment will generate the actual level blocks
-		
-		/***  THIS SEGMENT IS ONLY FOR TEST PURPOSES, WILL BE REMOVED AT A LATER TIME***/
-
-		for(int k = 0; k <levelY; k++ ) {
-			levelMap[0][k]=1;			
-			levelMap[levelY-1][k]=1;
-			levelMap[k][levelY-1]=2;
-			levelMap[k][0]=2;
+		while (roomsCompleted < maxNumberOfRooms) {
+			int sizeX = rand.nextInt(5) + 3;
+			int sizeY = rand.nextInt(3) + 1;
+			int posX = rand.nextInt(levelX - 9) + 1;
+			int posY = rand.nextInt(levelX - 5) + 1;
+			
+			Room newRoom = new Room(posX, posY,sizeX, sizeY, roomID, 0);
+			double maxOverlap = 0.0;
+			for(Room i : roomList ) {
+				double currentOverlap = i.calculateOverlap(newRoom);
+				if(maxOverlap < currentOverlap){
+					maxOverlap = currentOverlap;
+				}
+			}
+			if(maxOverlap == 0.0 ) {
+				roomsCompleted++;
+				roomList.add(newRoom);
+				roomID++;
+				for (int i = 0; i < sizeX; i++) {
+					for (int j = 0; j < sizeY; j++) {
+						levelMap[i+posX][j+posY]=0;
+						overlayMap[i+posX][j+posY]=roomID;
+					}
+				}
+				
+			}else {
+				errors++;
+			}
+			if(errors > 1000) { // prevents the room generation from potentially getting stuck in an infinite loop.
+				errors = 0;
+				roomsCompleted++;
+			}
+			// System.out.println(maxOverlap);
+			maxOverlap = 0.0;
 		}
-		levelMap[1][0]=0;
+		/// this segment is intended to simplify geometry to single blocks instead of
+		/// multiple blocks
+
 		
-		levelMap[2][2]=1;
+		for (int i = 0; i < levelX; i++) {
+			for (int j = 0; j < levelY; j++) {
+				String temp = String.format("%2d", overlayMap[j][i]);
+				System.out.print("[" + temp + "]");
+			}
+			System.out.println("");
+		}
 		
-		levelMap[3][3]=1;
-		levelMap[3][4]=1;
 		
-		/*** THIS IS THE END OF THE TEST SEGMENT***/
-		
-		/// this segment is intended to simplify geometry to single blocks instead of multiple blocks
- 		
-		for(int i = 0 ; i<levelX; i++) {
-			int adjacency = 0;			
-			for(int j = 0; j <levelY; j++ ) {
-				if(levelMap[i][j]==1) 
+		/*
+		ArrayList<int> currentRoom = new ArrayList<int>();
+		for (int i = 1; i < levelX -1 ; i++) {
+			for (int j = 1; j < levelY -1; j++) {
+				if(overlayMap[i][j]!=0) {
+					currentRoom = overlayMap[i][j];
+					if(overlayMap[i+1][j]!=) {
+						
+					}
+					if(overlayMap[i-1][j]) {
+						
+					}
+					if(overlayMap[i][j+1]) {
+						
+					}
+					if(overlayMap[i][j-1]) {
+						
+					}
+				}
+			}
+		}
+		*/
+		/*
+
+		for (int i = 0; i < levelX; i++) {
+			int adjacency = 0;
+			for (int j = 0; j < levelY; j++) {
+				if (levelMap[i][j] == 1)
 					adjacency++;
 				else {
-					if(adjacency != 0)
-						levelGrid.add(new Block(new Vec2(i*30, (j-adjacency)*30), 30, 30 * (adjacency), Color.GREEN));	
+					if (adjacency != 0)
+						levelGrid.add(new Block(new Vec2(i * BlockScaleFactor, (j - adjacency) * BlockScaleFactor),
+								BlockScaleFactor, BlockScaleFactor * (adjacency), Color.GREEN));
 					adjacency = 0;
 				}
 			}
-			if(adjacency > 1 ) 
-				levelGrid.add(new Block(new Vec2(i*30, 0), 30, 30 * (adjacency + 1), Color.GREEN));		
+			if (adjacency > 1)
+				levelGrid.add(new Block(new Vec2(i * BlockScaleFactor, 0), BlockScaleFactor,
+						BlockScaleFactor * (adjacency + 1), Color.GREEN));
 			adjacency = 0;
 		}
-		
+        */
 		// the original block implementation
-		for(int i = 0 ; i<levelX; i++) {			
-			for(int j = 0; j <levelY; j++ ) {			
-				if(levelMap[i][j]==2)
-					levelGrid.add(new Block(new Vec2(i*30, j*30), 30, 30, Color.RED));
-			}
-		}
-
+		
+		 for(int i = 0 ; i<levelX; i++) { 
+			 for(int j = 0; j <levelY; j++ ) {
+				 if(levelMap[i][j]==1) 
+					 levelGrid.add(new Block(new Vec2(i*blockScaleFactor, j*blockScaleFactor), blockScaleFactor, blockScaleFactor, Color.GREEN)); 
+			 }
+		 }
 		return levelGrid;
 	}
 }
