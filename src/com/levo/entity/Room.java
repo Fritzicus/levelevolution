@@ -16,15 +16,19 @@ public class Room {
 		
 	}
 	
-	public double calculateOverlap(Room compare) {
+	public int getRoomID() {
+		return this.roomID;
+	
+	}
+	
+	public int calculateOverlap(Room compare) {
 		
 		int intersectPosX= Math.max(this.posX, compare.posX);
 		int intersectPosY= Math.max(this.posY, compare.posY);
+		int xHighest= Math.max((this.posX + this.sizeX - 1), (compare.posX + compare.sizeX -1));
+		int yHighest= Math.max((this.posY + this.sizeY - 1), (compare.posY + compare.sizeY -1));
 		
-	    if(intersectPosX > Math.max((this.posX + this.sizeX - 1), (compare.posX + compare.sizeX -1))) 
-	    		return 0.0;
-	    if(intersectPosY > Math.max((this.posY + this.sizeY - 1), (compare.posY + compare.sizeY -1)))
-    		    return 0.0;
+
 	    
 	    int intersectSizeX = Math.max(0, (Math.min((this.posX + this.sizeX-1), (compare.posX + compare.sizeX-1))) - intersectPosX + 1);
 	    int intersectSizeY = Math.max(0, (Math.min((this.posY + this.sizeY-1), (compare.posY + compare.sizeY-1))) - intersectPosY + 1);
@@ -32,8 +36,27 @@ public class Room {
 	    // System.out.println(  (this.posX + this.sizeX) + " " +  + (compare.posX + compare.sizeX) + " " +intersectPosX + " " + intersectSizeX + " " + intersectSizeY);
 	    // System.out.println(  (this.posX + this.sizeX) + " " +  intersectSizeX + " " + intersectSizeY);
 	    
+	    if(intersectPosX > xHighest){
+	    	if(intersectPosX > xHighest + 1)
+	    		return -1;
+	    	else if(intersectSizeY>0){
+	    		return this.roomID;
+	    	}else {
+	    		return -1;
+	    	}
+	    }
+	    if(intersectPosY > yHighest){
+	    	if(intersectPosY > yHighest + 1)
+	    		return 0;
+	    	else if(intersectSizeX>0){
+	    		return this.roomID;
+	    	}else {
+	    		return -1;
+	    	}
+	    }
+	    
 	    if(intersectSizeX < 1 || intersectSizeY < 1) // return 0 if there is no intersect  area
-	    	return 0.0;	
+	    	return 0;	
 	   
 	    
 	    /*
@@ -51,7 +74,7 @@ public class Room {
 	    }
 		
 		*/
-	    return 1.0;
+	    return -1;
 		
 		
 	}

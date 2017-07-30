@@ -30,11 +30,13 @@ public class GenerateLevel {
 		int maxNumberOfRooms = (levelX * levelY) / roomsFactor; // This will be adjusted based on generation
 		int roomsCompleted = 0;
 		int errors = 0;
-		int roomID = 0;
+		int roomID = 1;
 		int blockScaleFactor = 5;
 		int [][]overlayMap = new int[levelX][levelY]; 
 		
-		ArrayList<Room> roomList = new ArrayList<Room>();
+		// ArrayList<Room> roomList = new ArrayList<Room>();
+		ArrayList<ArrayList<Room>> roomList = new ArrayList<ArrayList<Room>>();
+		
 		for (int i = 0; i < levelX; i++) {
 			for (int j = 0; j < levelY; j++) {
 				levelMap[i][j] = 1;
@@ -47,19 +49,37 @@ public class GenerateLevel {
 			int sizeY = rand.nextInt(3) + 1;
 			int posX = rand.nextInt(levelX - 9) + 1;
 			int posY = rand.nextInt(levelX - 5) + 1;
-			
+			int maxCluster = 0;
 			Room newRoom = new Room(posX, posY,sizeX, sizeY, roomID, 0);
-			double maxOverlap = 0.0;
-			for(Room i : roomList ) {
-				double currentOverlap = i.calculateOverlap(newRoom);
-				if(maxOverlap < currentOverlap){
-					maxOverlap = currentOverlap;
+			int maxOverlap = 0;
+			if(!roomList.isEmpty())
+			System.out.println(roomList.get(0).get(0).getRoomID());
+			for(ArrayList<Room> i : roomList ) {
+				for(Room j : i) {
+				int currentOverlap = j.calculateOverlap(newRoom);
+					if(currentOverlap == -1){
+						maxOverlap = -1;
+					}
 				}
 			}
-			if(maxOverlap == 0.0 ) {
+			if(maxOverlap > -1.0 ) {
 				roomsCompleted++;
-				roomList.add(newRoom);
+				boolean newCluster = true;
+				for(ArrayList<Room> i : roomList ) {
+					for(Room j : i) {
+						if(j.getRoomID() == maxOverlap) {
+							i.add(newRoom);
+							newCluster = false;
+						}
+					}
+				}
+				if(newCluster == true ) {
+					roomList.add(new ArrayList<Room>());
+					roomList.get(maxCluster).add(newRoom);
+					maxCluster++;
+				}
 				roomID++;
+				
 				for (int i = 0; i < sizeX; i++) {
 					for (int j = 0; j < sizeY; j++) {
 						levelMap[i+posX][j+posY]=0;
@@ -76,7 +96,7 @@ public class GenerateLevel {
 				roomsCompleted++;
 			}
 			// System.out.println(maxOverlap);
-			maxOverlap = 0.0;
+			maxOverlap = 0;
 		}
 		/// this segment is intended to simplify geometry to single blocks instead of
 		/// multiple blocks
