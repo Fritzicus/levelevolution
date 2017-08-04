@@ -9,6 +9,7 @@ public class Collision {
 	private Vec2 normal;
 	// Depth is the distance along the collision normal that two colliding objects overlap
 	private double depth;
+	private Vec2 contactPoint;
 	public Body a, b;
 	
 	public Collision(Body a, Body b) {
@@ -35,9 +36,8 @@ public class Collision {
 		double magnitude = (-(1 + restitution) * velAlongNormal) / (a.getMassInv() + b.getMassInv());
 		
 		Vec2 impulse = normal.scaled(magnitude);
-		a.vel.subtract(impulse.scaled(a.getMassInv()));
-		b.vel.add(impulse.scaled(b.getMassInv()));
-		
+		a.applyImpulse(impulse.scaled(-1), contactPoint);
+		b.applyImpulse(impulse, contactPoint);
 		
 		Vec2 tangent = relativeVel.subtracted(normal.scaled(normal.dot(relativeVel))).normalized();
 		double velAlongTangent = relativeVel.dot(tangent);
@@ -128,7 +128,7 @@ public class Collision {
 			}
 		}
 		depth = radius - pos.distance(closestPoint);
-		if (depth <= 0)
+		if (depth <= 0 && !inside)
 			return;
 		normal = closestPoint.subtracted(pos).normalized().scaled(inside ? -1 : 1); 
 	}

@@ -3,9 +3,9 @@ package com.levo.physics;
 import java.awt.Color;
 
 public enum Material {
-	WOOD (5, .7, .05, new Color(130, 82, 1)),
-	RUBBER (10, .9, .1, new Color(11, 38, 81)),
-	IMMOVEABLE (0, .2, .2, Color.DARK_GRAY);
+	WOOD (5, 1, .05, new Color(130, 82, 1)),
+	RUBBER (10, 1, .1, new Color(11, 38, 81)),
+	IMMOVEABLE (0, .2, .6, Color.DARK_GRAY);
 
 	private double density;
 	private double restitution;

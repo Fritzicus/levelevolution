@@ -1,6 +1,7 @@
 package com.levo.game;
 
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import com.levo.entity.Entity;
@@ -44,6 +45,10 @@ public class Camera {
 	
 	public Vec2 getCoordinate(Vec2 mouseCoord) {
 		return new Vec2(mouseCoord.x + pos.x - 200, mouseCoord.y + pos.y - 200);
+	}
+	
+	public Vec2 getCoordinate(MouseEvent e) {
+		return new Vec2(e.getX() + pos.x - 200, e.getY() + pos.y - 200);
 	}
 	
 	// Update the position of the camera to keep the tracked entity within the X and Y tolerances

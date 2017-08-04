@@ -103,6 +103,16 @@ public class Vec2 {
 		return v.x * x + v.y * y;
 	}
 	
+	// Gives the vector-vector cross product in 2D
+	public double cross(Vec2 v) {
+		return x * v.y - y * v.x;
+	}
+	
+	// Gives the vector scalar cross product in 2D
+	public Vec2 cross(double d) {
+		return new Vec2(d * y, -d * x);
+	}
+	
 	// Gives the length of another vector projected on this one
 	public double projectionLength(Vec2 v) {
 		return dot(v.normalized());
