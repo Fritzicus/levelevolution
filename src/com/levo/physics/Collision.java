@@ -72,7 +72,11 @@ public class Collision {
 			CirclevsAABB((Circle) a, (AABB) b);
 		} else if (a instanceof Circle && b instanceof Circle) {
 			CirclevsCircle((Circle) a, (Circle) b);
+		} else if (a instanceof Polygon && b instanceof Polygon) {
+			PolygonvsPolygon((Polygon) a, (Polygon) b);
 		}
+		System.out.println("Collisioning");
+		System.out.println(normal + "\n" + depth + "\n" + contactPoint);
 	}
 	
 	private void AABBvsAABB(AABB a, AABB b) {
@@ -136,6 +140,45 @@ public class Collision {
 	private void CirclevsCircle(Circle a, Circle b) {
 		normal = b.getPos().subtracted(a.getPos()).normalized();
 		depth = a.getRadius() + b.getRadius() - a.getPos().distance(b.getPos());
+	}
+
+	private void PolygonvsPolygon(Polygon a, Polygon b) {
+		double aPenetration = Double.MAX_VALUE;
+		Vec2 aSupportPoint = null;
+		Vec2 aReferenceFace = null;
+		for (int i = 0; i < a.getNumSides(); i++) {
+			Vec2 normal = a.getNormal(i);
+			Vec2 support = b.getSupport(a.getNormal(i).scaled(-1));
+			double penetration = normal.scaled(-1).dot(support.subtracted(a.getVertex(i)));
+			if (penetration < aPenetration) {
+				aPenetration = penetration;
+				aSupportPoint = support;
+				aReferenceFace = normal;
+			}
+		}
+		double bPenetration = Double.MAX_VALUE;
+		Vec2 bSupportPoint = null;
+		Vec2 bReferenceFace = null;
+		for (int i = 0; i < b.getNumSides(); i++) {
+			Vec2 normal = b.getNormal(i);
+			Vec2 support = a.getSupport(b.getNormal(i).scaled(-1));
+			double penetration = normal.scaled(-1).dot(support.subtracted(b.getVertex(i)));
+			if (penetration < bPenetration) {
+				bPenetration = penetration;
+				bSupportPoint = support;
+				bReferenceFace = normal;
+			}
+		}
+		
+		if (aPenetration < bPenetration) {
+			normal = aReferenceFace.scaled(1);
+			depth = aPenetration;
+			contactPoint = aSupportPoint;
+		} else {
+			normal = bReferenceFace.scaled(-1);
+			depth = bPenetration;
+			contactPoint = bSupportPoint;
+		}
 	}
 	
 	public Vec2 getNormal() {

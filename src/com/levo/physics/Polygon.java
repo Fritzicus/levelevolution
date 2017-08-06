@@ -1,6 +1,5 @@
 package com.levo.physics;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ public class Polygon extends Body {
 	private Vec2 pos;
 	private Vec2[] vertices;
 	private Vec2[] normals; // Inner normals
-	private boolean colliding;
 	
 	public Polygon(Vec2[] vertices, Material mat) {
 		super(mat);
@@ -18,8 +16,8 @@ public class Polygon extends Body {
 		calcNormals();
 	}
 	
-	public Polygon(Vec2 pos, double radius, int numSides) {
-		super(Material.WOOD);
+	public Polygon(Vec2 pos, double radius, int numSides, Material mat) {
+		super(mat);
 		this.pos = pos;
 		
 		vertices = new Vec2[numSides];
@@ -44,8 +42,6 @@ public class Polygon extends Body {
 	
 	public void draw(Graphics2D g) {
 		g.setColor(mat.color());
-		if (colliding)
-			g.setColor(Color.RED);
 		Vec2 first = vertices[0].added(pos);
 		Vec2 prev = first;
 		for (int i = 1; i < vertices.length; i++) {
@@ -66,6 +62,8 @@ public class Polygon extends Body {
 	public void rotateBy(double angle) {
 		for (Vec2 v : vertices)
 			v.rotate(angle);
+		for (Vec2 v : normals)
+			v.rotate(angle);
 	}
 
 	public double area() {
@@ -74,10 +72,12 @@ public class Polygon extends Body {
 		Vec2 prev = first;
 		for (int i = 1; i < vertices.length; i++) {
 			Vec2 point = vertices[i];
-			area += point.dot(prev) / 2;
+			area += Math.abs(point.cross(prev) / 2);
 			prev = point;
 		}
-		area += prev.dot(first) / 2;
+		System.out.println(area);
+		area += Math.abs(prev.cross(first) / 2);
+		System.out.println(area);
 		return area;
 	}
 
@@ -98,7 +98,6 @@ public class Polygon extends Body {
 	}
 
 	public boolean isColliding(Body b) {
-		colliding = false;
 		Polygon p = (Polygon) b;
 		for (int i = 0; i < normals.length; i++) {
 			if (normals[i].dot(p.getSupport(normals[i].scaled(-1)).subtracted(vertices[i].added(pos))) > 0)
@@ -108,11 +107,10 @@ public class Polygon extends Body {
 			if (p.normals[i].dot(getSupport(p.normals[i].scaled(-1)).subtracted(p.vertices[i].added(p.pos))) > 0)
 				return false;
 		}
-		colliding = true;
 		return true;
 	}
 	
-	private Vec2 getSupport(Vec2 dir) {
+	public Vec2 getSupport(Vec2 dir) {
 		double bestProjection = -Double.MAX_VALUE;
 		Vec2 bestVec = null;
 		for (int i = 0; i < vertices.length; i++) {
@@ -125,4 +123,15 @@ public class Polygon extends Body {
 		return bestVec.added(pos);
 	}
 	
+	public int getNumSides() {
+		return vertices.length;
+	}
+	
+	public Vec2 getVertex(int idx) {
+		return vertices[idx].added(pos);
+	}
+	
+	public Vec2 getNormal(int idx) {
+		return normals[idx];
+	}
 }

@@ -37,8 +37,10 @@ public class PhysicsState extends GameState {
 			bodies.add(new Circle(new Vec2(10 + 380 * Math.random(), 10 + Math.random() * 300), 10, Material.RUBBER));
 		}*/
 		
-		bodies.add(new Polygon(new Vec2(300, 200), 50, 5));
-		bodies.add(new Polygon(new Vec2(100, 200), 50, 6));
+		bodies.add(new Polygon(new Vec2(300, 200), 30, 3, Material.RUBBER));
+		bodies.add(new Polygon(new Vec2(100, 200), 40, 5, Material.WOOD));
+		bodies.add(new Polygon(new Vec2(200, 500), 200, 4, Material.IMMOVEABLE));
+		bodies.get(bodies.size() - 1).rotateBy(Math.PI / 4);
 		
 		engine = new PhysicsEngine(bodies);
 		

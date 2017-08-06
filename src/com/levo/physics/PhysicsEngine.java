@@ -22,7 +22,7 @@ public class PhysicsEngine {
 		List<Collision> collisions = new LinkedList<Collision>();
 		for (int i = 0; i < bodies.size(); i++) {
 			Body b = bodies.get(i);
-			//b.applyForce(new Vec2(0, 1).scaled(b.getMass()));
+			b.applyForce(new Vec2(0, 1).scaled(b.getMass()));
 			b.update(dt);
 			for (int j = i + 1; j < bodies.size(); j++) {
 				if (b.isColliding(bodies.get(j))) {
