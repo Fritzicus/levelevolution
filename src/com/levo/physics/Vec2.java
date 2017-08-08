@@ -1,6 +1,6 @@
 package com.levo.physics;
 
-// Represents a two dimensional vector with cartesian coordinates
+// Represents a two dimensional vector with Cartesian coordinates
 public class Vec2 {
 	// The minimum value either component of a vector can attain. Helps with optimization
 	public static final double MIN_VALUE_THRESHOLD = .000001;

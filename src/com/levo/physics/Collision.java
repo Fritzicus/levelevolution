@@ -27,7 +27,11 @@ public class Collision {
 	public void resolve() {
 		if (depth <= 0)
 			return;
-		Vec2 relativeVel = b.vel.subtracted(a.vel);
+		
+		Vec2 radiusA = contactPoint.subtracted(a.centerPoint());
+		Vec2 radiusB = contactPoint.subtracted(b.centerPoint());
+		
+		Vec2 relativeVel = b.vel.added(radiusB.cross(-b.angularVel)).subtracted(a.vel.added(radiusA.cross(-a.angularVel)));
 		double velAlongNormal = relativeVel.dot(normal);
 		if (velAlongNormal > 0)
 			return;
@@ -41,7 +45,7 @@ public class Collision {
 		
 		Vec2 tangent = relativeVel.subtracted(normal.scaled(normal.dot(relativeVel))).normalized();
 		double velAlongTangent = relativeVel.dot(tangent);
-		double tanMagnitude = (-(1 + restitution) * velAlongTangent) / (a.getMassInv() + b.getMassInv());
+		double tanMagnitude = (-(1 + restitution) * velAlongTangent) / (a.getMassInv() + b.getMassInv() + Math.pow(tangent.cross(radiusA), 2) * a.getInertiaInv() + Math.pow(tangent.cross(radiusB), 2) * b.getInertiaInv());
 		double friction = Material.combinedFriction(a.getMaterial().staticFriction(), b.getMaterial().staticFriction());
 		Vec2 frictionImpulse = null;
 		if (Math.abs(tanMagnitude) < magnitude * friction) {
@@ -171,7 +175,7 @@ public class Collision {
 		}
 		
 		if (aPenetration < bPenetration) {
-			normal = aReferenceFace.scaled(1);
+			normal = aReferenceFace;
 			depth = aPenetration;
 			contactPoint = aSupportPoint;
 		} else {

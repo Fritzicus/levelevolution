@@ -81,7 +81,7 @@ public abstract class Body implements Drawable {
 	
 	public double getInertia() {
 		if (inertia == Body.UNDEFINED_MASS) {
-			inertia = area() * mat.density() * 5000;
+			inertia = area() * mat.density() * 2000;
 		}
 		return mass;
 	}
