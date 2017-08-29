@@ -23,15 +23,13 @@ public class GenerateLevel {
 		this.levelMap = new int[levelX][levelY];
 	}
 
-	public ArrayList<Entity> generateTerrain() {
-		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
+	public int[][] generateArray() {
 		Random rand = new Random();
 		int roomsFactor = 20;
 		int maxNumberOfRooms = (levelX * levelY) / roomsFactor; // This will be adjusted based on generation
 		int roomsCompleted = 0;
 		int errors = 0;
 		int roomID = 1;
-		int blockScaleFactor = 5;
 		int[][] overlayMap = new int[levelX][levelY];
 
 		ArrayList<Integer> adjacentRooms = new ArrayList<Integer>();
@@ -160,6 +158,11 @@ public class GenerateLevel {
 			System.out.println("");
 		}
 
+		return levelMap;
+	}
+	public ArrayList<Entity> generateTerrain(){
+		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
+		int blockScaleFactor = 30;
 		for (int i = 0; i < levelX; i++) {
 			for (int j = 0; j < levelY; j++) {
 				if (levelMap[i][j] == 1)
@@ -168,5 +171,22 @@ public class GenerateLevel {
 			}
 		}
 		return levelGrid;
+	}
+	
+	public int[] generatePlayerPos() {
+		int[] PlayerPos = new int[2];
+		Random rand = new Random();
+		int posX = rand.nextInt(levelX - 2) + 1;
+		int posY = rand.nextInt(levelY - 2) + 1;
+		
+		while(true) {
+			posX = rand.nextInt(levelX - 2) + 1;
+			posY = rand.nextInt(levelY - 2) + 1;
+			if(levelMap[posX][posY]==0 && levelMap[posX][posY+1]==1) {
+				PlayerPos[0]=30*posX - 15;
+				PlayerPos[1]=30*posY - 15;
+				return PlayerPos;
+			}
+		}
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.levo.entity.Camera;
 import com.levo.entity.Entity;
@@ -23,10 +24,16 @@ public class PlayState extends GameState {
 	public PlayState() {
 		super();
 		
+		
 		// going to add basic level generation for now
 		GenerateLevel createLevel = new GenerateLevel();
 		blocks = new ArrayList<Entity>();
+		
+		createLevel.generateArray();
 		blocks = createLevel.generateTerrain();
+		
+		
+		
 		/*
 		blocks = new ArrayList<Entity>();
 		
@@ -35,7 +42,13 @@ public class PlayState extends GameState {
 		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
 		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
 		*/
-		p = new Player(new Vec2(10, -10), keyDown);
+		
+		int[] playerPos = new int[2];
+		
+		playerPos=createLevel.generatePlayerPos();
+		
+		
+		p = new Player(new Vec2(playerPos[0],playerPos[1]), keyDown);
 
 		// Initialize Camera to track the player
 		cam = new Camera(p);
