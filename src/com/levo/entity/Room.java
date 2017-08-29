@@ -49,4 +49,56 @@ public class Room {
 	    		return 0;
 
 	}
+	
+	public int getDistance(Room compare) {
+		int manhattenDistance = 0;
+		manhattenDistance = Math.abs((this.posX + this.sizeX/2) - (compare.posX + compare.sizeX/2)) + Math.abs((this.posY + this.sizeY/2) - (compare.posY + compare.sizeY/2) );
+		
+		return manhattenDistance;
+	}
+	
+	public int[][] drawPath(Room compare, int[][]levelMap){
+		int xOffset = (compare.posX + compare.sizeX/2) -  (this.posX + this.sizeX/2);
+		int yOffset = (compare.posY + compare.sizeY/2) -  (this.posY + this.sizeY/2) ;
+
+		int xCurrent = (this.posX + this.sizeX/2); 
+		int yCurrent = (this.posY + this.sizeY/2);
+		/*
+		if(xOffset == 0 )
+			if(yOffset> 0) 
+				for(int i=0; i < yOffset; i++) 
+					levelMap[xCurrent][yCurrent+i]=0;				
+			else 
+				for(int i=0; i > yOffset; i--) 
+					levelMap[xCurrent][yCurrent+i]=0;				
+		else if(yOffset == 0)
+			if(xOffset> 0) 
+				for(int i=0; i < xOffset; i++) 
+					levelMap[xCurrent+i][yCurrent]=0;				
+			else 
+				for(int i=0; i > xOffset; i--) 
+					levelMap[xCurrent+i][yCurrent]=0;	
+			
+		*/
+		
+		while(xOffset!=0) {
+			if(xOffset > 0) {
+				levelMap[xCurrent+xOffset][yCurrent]=0;
+				xOffset--;
+			}else {
+				levelMap[xCurrent+xOffset][yCurrent]=0;
+				xOffset++;
+			}				
+		}
+		while(yOffset!=0) {
+			if(yOffset > 0) {
+				levelMap[xCurrent][yCurrent+yOffset]=0;
+				yOffset--;
+			}else {
+				levelMap[xCurrent][yCurrent+yOffset]=0;
+				yOffset++;
+			}	
+		}
+		return levelMap;
+	}
 }

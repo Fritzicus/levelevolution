@@ -33,10 +33,9 @@ public class GenerateLevel {
 		int roomID = 1;
 		int blockScaleFactor = 5;
 		int[][] overlayMap = new int[levelX][levelY];
-		
+
 		ArrayList<Integer> adjacentRooms = new ArrayList<Integer>();
 		ArrayList<Integer> simplifyRooms = new ArrayList<Integer>();
-		
 
 		ArrayList<ArrayList<Room>> roomList = new ArrayList<ArrayList<Room>>();
 
@@ -56,15 +55,15 @@ public class GenerateLevel {
 			Room newRoom = new Room(posX, posY, sizeX, sizeY, roomID, 0); // instantiates a new room object
 			adjacentRooms.clear();
 			simplifyRooms.clear();
-			//System.out.println("For room: " + roomID);
-			
+			// System.out.println("For room: " + roomID);
+
 			for (ArrayList<Room> i : roomList) {
-				for (Room j : i) {                                        // For loops checks to see if rooms are not overlapping
+				for (Room j : i) { // For loops checks to see if rooms are not overlapping
 					int currentOverlap = j.calculateOverlap(newRoom);
-					if (currentOverlap == -1) 
+					if (currentOverlap == -1)
 						maxOverlap = -1;
-					if (maxOverlap != -1) 
-						if(currentOverlap !=0)
+					if (maxOverlap != -1)
+						if (currentOverlap != 0)
 							adjacentRooms.add(currentOverlap);
 				}
 
@@ -78,76 +77,81 @@ public class GenerateLevel {
 				}
 				if (adjacentRooms.isEmpty()) { // if there is not an adjacent room, add new room cluster to arraylist
 					roomList.add(new ArrayList<Room>());
-					roomList.get(roomList.size()-1).add(newRoom);
-				}else 
-					for (int i = 0; i < roomList.size(); i++) 
-						for (int j = 0; j < roomList.get(i).size(); j++) 
-							for(int k : adjacentRooms) 
-								if(roomList.get(i).get(j).getRoomID() == k) // checks to see if there are adjacent rooms
-									if(!simplifyRooms.contains(i))
+					roomList.get(roomList.size() - 1).add(newRoom);
+				} else
+					for (int i = 0; i < roomList.size(); i++)
+						for (int j = 0; j < roomList.get(i).size(); j++)
+							for (int k : adjacentRooms)
+								if (roomList.get(i).get(j).getRoomID() == k) // checks to see if there are adjacent
+																				// rooms
+									if (!simplifyRooms.contains(i))
 										simplifyRooms.add(i);
 
-				if(!simplifyRooms.isEmpty()) {
+				if (!simplifyRooms.isEmpty()) {
 					roomList.get(simplifyRooms.get(0)).add(newRoom);
 				}
-				
-				if(simplifyRooms.size() > 1) {
-					for(int i = 1; i<simplifyRooms.size();i++) {
+
+				if (simplifyRooms.size() > 1) {
+					for (int i = 1; i < simplifyRooms.size(); i++) {
 						roomList.get(simplifyRooms.get(0)).addAll(roomList.get(simplifyRooms.get(i)));
 						roomList.get(simplifyRooms.get(i)).clear();
 					}
 
 				}
-				System.out.println("for RoomID: "+ roomID);
-				for(int i : adjacentRooms)
-					System.out.print(i + " ");
-				
-				System.out.println("");
-				for(int i : simplifyRooms)
-					System.out.print(i + " ");
-				System.out.println("");
 				adjacentRooms.clear();
 				simplifyRooms.clear();
 				roomsCompleted++;
 				roomID++;
 
-				
-				/*for (ArrayList<Room> i : roomList) {
-					for (Room j : i) {
-						System.out.print(j.getRoomID()+" ");
-					}
-					System.out.println("");
-				}
-				*/
 			} else {
 				errors++;
 			}
 			if (errors > 100) { // prevents the room generation from potentially getting stuck in an infinite
-									// loop.
+								// loop.
 				errors = 0;
 				System.out.println("Lots of errors");
 				roomsCompleted++;
 			}
 		}
+		Room roomA = null;
+		Room roomB = null;
+		ArrayList<Room> test = null;
+		int distanceBetweenRooms = levelX * levelY;
+		for (int x = 0; x < 5; x++) { // TEMPORARY WAY TO ASSURE CONNECTEDNESS
+			for (ArrayList<Room> n : roomList) {
+				distanceBetweenRooms = levelX * levelY;
+				roomA = null;
+				roomB = null;
+				test = null;
+				for (ArrayList<Room> i : roomList) {
+					if (n != i && !n.isEmpty() && !i.isEmpty()) {
+						for (Room j : i) {
+							for (Room o : n) {
+								if (distanceBetweenRooms > j.getDistance(o)) {
+									distanceBetweenRooms = j.getDistance(o);
+									roomA = j;
+									roomB = o;
+									test = i;
+								}
+							}
+						}
+					}
+				}
+				if (roomA != null && roomB != null)
+					roomA.drawPath(roomB, levelMap);
+				if (test != null) {
+					n.addAll(test);
+					test.clear();
+				}
+			}
+		}
+		for (ArrayList<Room> i : roomList) {
+			for (Room j : i) {
+				System.out.print(j.getRoomID() + " ");
+			}
+			System.out.println("");
+		}
 
-			
-		/// this segment is intended to simplify geometry to single blocks instead of
-		/// multiple blocks
-		/*
-		for (ArrayList<Room> i : roomList) {
-			for (Room j : i) {
-				System.out.print(j.getRoomID()+" ");
-			}
-			System.out.println("");
-		}
-		*/
-		for (ArrayList<Room> i : roomList) {
-			for (Room j : i) {
-				System.out.print(j.getRoomID()+" ");
-			}
-			System.out.println("");
-		}
-		
 		for (int i = 0; i < levelX; i++) {
 			for (int j = 0; j < levelY; j++) {
 				String temp = String.format("%2d", overlayMap[j][i]);
