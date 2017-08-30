@@ -61,23 +61,6 @@ public class Room {
 
 		int xCurrent = (this.posX + this.sizeX/2); 
 		int yCurrent = (this.posY + this.sizeY/2);
-		/*
-		if(xOffset == 0 )
-			if(yOffset> 0) 
-				for(int i=0; i < yOffset; i++) 
-					levelMap[xCurrent][yCurrent+i]=0;				
-			else 
-				for(int i=0; i > yOffset; i--) 
-					levelMap[xCurrent][yCurrent+i]=0;				
-		else if(yOffset == 0)
-			if(xOffset> 0) 
-				for(int i=0; i < xOffset; i++) 
-					levelMap[xCurrent+i][yCurrent]=0;				
-			else 
-				for(int i=0; i > xOffset; i--) 
-					levelMap[xCurrent+i][yCurrent]=0;	
-			
-		*/
 		
 		while(xOffset!=0) {
 			if(xOffset > 0) {

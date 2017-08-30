@@ -33,16 +33,6 @@ public class PlayState extends GameState {
 		blocks = createLevel.generateTerrain();
 		
 		
-		
-		/*
-		blocks = new ArrayList<Entity>();
-		
-		blocks.add(new Block(new Vec2(50, 380), 100, 20, Color.GREEN));
-		blocks.add(new Block(new Vec2(150, 360), 1000, 40, Color.BLUE));
-		blocks.add(new Block(new Vec2(50, 240), 200, 40, Color.CYAN));
-		blocks.add(new Block(new Vec2(420, 140), 80, 80, Color.RED));
-		*/
-		
 		int[] playerPos = new int[2];
 		
 		playerPos=createLevel.generatePlayerPos();

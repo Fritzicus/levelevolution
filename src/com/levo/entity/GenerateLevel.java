@@ -115,7 +115,7 @@ public class GenerateLevel {
 		Room roomB = null;
 		ArrayList<Room> test = null;
 		int distanceBetweenRooms = levelX * levelY;
-		for (int x = 0; x < 5; x++) { // TEMPORARY WAY TO ASSURE CONNECTEDNESS
+		for (int x = 0; x < 10; x++) { // TEMPORARY WAY TO ASSURE CONNECTEDNESS
 			for (ArrayList<Room> n : roomList) {
 				distanceBetweenRooms = levelX * levelY;
 				roomA = null;
@@ -163,6 +163,35 @@ public class GenerateLevel {
 	public ArrayList<Entity> generateTerrain(){
 		ArrayList<Entity> levelGrid = new ArrayList<Entity>();
 		int blockScaleFactor = 30;
+		int trail = -1;
+		boolean prev = false;
+
+		for (int i = 0; i < levelX; i++) {
+			trail = -1;
+		    prev = false;
+			for (int j = 0; j < levelY; j++) {
+				if (levelMap[i][j] == 1) {
+					if(prev==false) {
+						prev = true;
+						trail = j;
+					}
+				}else {
+					if(prev==true) {
+						prev = false;
+						levelGrid.add(new Block(new Vec2(i * blockScaleFactor, trail * blockScaleFactor), blockScaleFactor,
+								(blockScaleFactor*(j - trail)), Color.GREEN));
+						trail = -1;
+					}
+				}
+					
+			}
+			if(trail!=-1) {
+				levelGrid.add(new Block(new Vec2(i * blockScaleFactor, trail * blockScaleFactor), blockScaleFactor,
+						(blockScaleFactor*(levelY - trail)), Color.GREEN));
+			}
+		}
+		
+		/*
 		for (int i = 0; i < levelX; i++) {
 			for (int j = 0; j < levelY; j++) {
 				if (levelMap[i][j] == 1)
@@ -170,6 +199,7 @@ public class GenerateLevel {
 							blockScaleFactor, Color.GREEN));
 			}
 		}
+		*/
 		return levelGrid;
 	}
 	
